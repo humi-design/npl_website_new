@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Precision Machined Parts Manufacturer India | Custom Components | Nirmal Precision{% endblock %}
+{% block meta_title %}Precision Machined Parts Manufacturer India - Custom Components | Nirmal Precision{% endblock %}
+{% block meta_description %}Expert precision machined parts manufacturer in India. CNC turning and milling with tolerances to ±0.01mm. Custom components, prototypes, and production runs. ISO 9001:2015 certified. Global export to 80+ countries.{% endblock %}
+{% block meta_keywords %}precision machined parts India, custom machined components, precision turning, CNC machining India, precision components manufacturer, India machining services{% endblock %}
+{% block canonical_url %}https://nirmalprecision.com/precision-machined-parts{% endblock %}
+{% block og_type %}website{% endblock %}
+{% block og_title %}Precision Machined Parts Manufacturer India | Nirmal Precision{% endblock %}
+{% block og_description %}Expert precision machined parts manufacturer in India. Tolerances to ±0.01mm. ISO 9001:2015 certified.{% endblock %}
+{% block og_url %}https://nirmalprecision.com/precision-machined-parts{% endblock %}
+{% block og_image %}https://nirmalprecision.com/static/img/og-precision-machined.jpg{% endblock %}
+{% block twitter_title %}Precision Machined Parts Manufacturer India | Nirmal Precision{% endblock %}
+{% block twitter_description %}Expert precision machined parts manufacturer in India. Tolerances to ±0.01mm. ISO 9001:2015 certified.{% endblock %}
+{% block twitter_url %}https://nirmalprecision.com/precision-machined-parts{% endblock %}
+{% block twitter_image %}https://nirmalprecision.com/static/img/og-precision-machined.jpg{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://nirmalprecision.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Precision Machined Parts", "item": "https://nirmalprecision.com/precision-machined-parts"}
+    ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.landing-hero { padding: 120px 0 80px; background: linear-gradient(135deg, var(--bg-light) 0%, var(--white) 100%); }
+.landing-hero::before { content: ''; position: absolute; top: -30%; right: -10%; width: 50%; height: 150%; background: linear-gradient(135deg, rgba(10, 77, 156, 0.08) 0%, rgba(30, 136, 229, 0.1) 100%); border-radius: 50%; filter: blur(80px); }
+.landing-hero h1 { font-size: 48px; font-weight: 800; margin-bottom: 20px; line-height: 1.2; }
+.landing-hero p { font-size: 18px; color: var(--text-muted); max-width: 600px; margin-bottom: 24px; }
+.highlight-text { color: var(--primary); font-weight: 700; }
+.tolerance-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; text-align: center; transition: var(--transition); }
+.tolerance-card:hover { border-color: var(--primary); box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+.tolerance-value { font-size: 48px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+.tolerance-label { font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+@media (max-width: 768px) { .landing-hero h1 { font-size: 32px; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="landing-hero" style="position: relative; overflow: hidden;">
+    <div class="container">
+        <span class="section-label"><i data-lucide="settings"></i>Precision Machined Parts</span>
+        <h1><span class="highlight-text">Precision Machined Parts</span> Manufacturer in India</h1>
+        <p>Nirmal Precision is your trusted partner for precision machined components. Our state-of-the-art CNC facilities deliver tolerances down to ±0.01mm for critical applications across aerospace, automotive, medical, and industrial sectors.</p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('contact') }}" class="btn btn-primary"><i data-lucide="mail"></i>Request Quote</a>
+            <a href="{{ url_for('products_page') }}" class="btn btn-outline"><i data-lucide="package"></i>View Products</a>
+        </div>
+    </div>
+</section>
+
+<section class="section" style="background: var(--bg-light);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label"><i data-lucide="ruler"></i>Precision Standards</span>
+            <h2 class="section-title">Our Machining Precision</h2>
+        </div>
+        <div class="grid grid-4" style="margin-top: 32px;">
+            <div class="tolerance-card">
+                <div class="tolerance-value">±0.01mm</div>
+                <div class="tolerance-label">Tolerance Capability</div>
+            </div>
+            <div class="tolerance-card">
+                <div class="tolerance-value">Ra 0.8</div>
+                <div class="tolerance-label">Surface Finish</div>
+            </div>
+            <div class="tolerance-card">
+                <div class="tolerance-value">M4-M36</div>
+                <div class="tolerance-label">Size Range</div>
+            </div>
+            <div class="tolerance-card">
+                <div class="tolerance-value">100%</div>
+                <div class="tolerance-label">Inspection Rate</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label"><i data-lucide="settings"></i>Services</span>
+            <h2 class="section-title">Precision Machining Services</h2>
+        </div>
+        <div class="grid grid-2" style="margin-top: 32px;">
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="rotate-cw"></i></div>
+                <h4 class="feature-title">CNC Turning</h4>
+                <p class="feature-text">High-precision CNC turning for cylindrical components with multi-axis capabilities, threading, grooving, and parting operations.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="move"></i></div>
+                <h4 class="feature-title">CNC Milling</h4>
+                <p class="feature-text">3-axis and 4-axis milling for complex shapes with pocketing, profiling, drilling, and contouring capabilities.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="file-check"></i></div>
+                <h4 class="feature-title">Quality Inspection</h4>
+                <p class="feature-text">100% dimensional verification using CMM, precision micrometers, bore gauges, and optical comparators with full documentation.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="box"></i></div>
+                <h4 class="feature-title">Custom Solutions</h4>
+                <p class="feature-text">From prototype to production, we handle custom components with complete traceability and export-ready packaging.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" style="background: var(--bg-light);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label"><i data-lucide="building-2"></i>Industries</span>
+            <h2 class="section-title">Industries We Serve</h2>
+        </div>
+        <div class="grid grid-4" style="margin-top: 32px;">
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="car"></i></div>
+                <h4 class="feature-title">Automotive</h4>
+                <p class="feature-text">Engine, transmission, and chassis components.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="plane"></i></div>
+                <h4 class="feature-title">Aerospace</h4>
+                <p class="feature-text">High-strength precision components.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="heart-pulse"></i></div>
+                <h4 class="feature-title">Medical</h4>
+                <p class="feature-text">Surgical instruments and implants.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="cpu"></i></div>
+                <h4 class="feature-title">Electronics</h4>
+                <p class="feature-text">Precision connectors and enclosures.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="cta-bg"></div>
+    <div class="container">
+        <div class="cta-content">
+            <h2 class="cta-title">Need Precision Components?</h2>
+            <p class="cta-text">Get a detailed quote within 24 hours. Share your specifications and requirements.</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('contact') }}" class="btn btn-white"><i data-lucide="mail"></i>Request Quote</a>
+                <a href="{{ url_for('products_page') }}" class="btn" style="background: transparent; border: 2px solid white; color: white;"><i data-lucide="package"></i>View Products</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

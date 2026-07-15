@@ -1,0 +1,482 @@
+{% extends "base.html" %}
+
+{% block title %}Fastener Manufacturer India | Industrial Fasteners Export | Nirmal Precision{% endblock %}
+{% block meta_title %}Fastener Manufacturer India - Industrial Fasteners Exporter | Nirmal Precision{% endblock %}
+{% block meta_description %}Leading fastener manufacturer in India since 1997. We produce industrial fasteners including hex bolts, nuts, washers, screws, and custom fasteners. ISO 9001:2015 certified. Export to 80+ countries. Request a quote today.{% endblock %}
+{% block meta_keywords %}fastener manufacturer India, industrial fasteners India, hex bolt manufacturer, nut manufacturer India, washer manufacturer, screw manufacturer, custom fasteners India, India fastener export{% endblock %}
+{% block canonical_url %}https://nirmalprecision.com/fastener-manufacturer-india{% endblock %}
+{% block og_type %}website{% endblock %}
+{% block og_title %}Fastener Manufacturer India | Industrial Fasteners Export | Nirmal Precision{% endblock %}
+{% block og_description %}Leading fastener manufacturer in India since 1997. ISO 9001:2015 certified. Export to 80+ countries.{% endblock %}
+{% block og_url %}https://nirmalprecision.com/fastener-manufacturer-india{% endblock %}
+{% block og_image %}https://nirmalprecision.com/static/img/og-fastener-manufacturer.jpg{% endblock %}
+{% block twitter_title %}Fastener Manufacturer India | Nirmal Precision{% endblock %}
+{% block twitter_description %}Leading fastener manufacturer in India since 1997. ISO 9001:2015 certified. Export to 80+ countries.{% endblock %}
+{% block twitter_url %}https://nirmalprecision.com/fastener-manufacturer-india{% endblock %}
+{% block twitter_image %}https://nirmalprecision.com/static/img/og-fastener-manufacturer.jpg{% endblock %}
+
+{% block structured_data %}
+<!-- BreadcrumbList Schema -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://nirmalprecision.com/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Fastener Manufacturer India",
+            "item": "https://nirmalprecision.com/fastener-manufacturer-india"
+        }
+    ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.landing-hero {
+    padding: 120px 0 80px;
+    background: linear-gradient(135deg, var(--bg-light) 0%, var(--white) 100%);
+    position: relative;
+}
+
+.landing-hero::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 50%;
+    height: 150%;
+    background: linear-gradient(135deg, rgba(10, 77, 156, 0.08) 0%, rgba(30, 136, 229, 0.1) 100%);
+    border-radius: 50%;
+    filter: blur(80px);
+}
+
+.landing-hero h1 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.landing-hero p {
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin-bottom: 24px;
+}
+
+.highlight-text {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 48px;
+}
+
+.product-item {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    transition: var(--transition);
+}
+
+.product-item:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+}
+
+.product-item h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+}
+
+.product-item p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.product-item ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.product-item li {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 4px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.product-item li::before {
+    content: '✓';
+    color: var(--success);
+    font-weight: bold;
+}
+
+.advantages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+    margin-top: 48px;
+}
+
+.advantage-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    transition: var(--transition);
+}
+
+.advantage-card:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+}
+
+.advantage-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.advantage-icon i {
+    width: 32px;
+    height: 32px;
+    color: var(--white);
+}
+
+.advantage-card h4 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.advantage-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+    .landing-hero h1 {
+        font-size: 32px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="landing-hero">
+    <div class="container">
+        <span class="section-label">
+            <i data-lucide="factory"></i>
+            Fastener Manufacturer India
+        </span>
+        <h1>Leading <span class="highlight-text">Fastener Manufacturer in India</span> Since 1997</h1>
+        <p>
+            Nirmal Precision is a premier industrial fastener manufacturer in India, producing high-quality hex bolts, nuts, washers, screws, and custom precision components. ISO 9001:2015 certified with global export to 80+ countries.
+        </p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('contact') }}" class="btn btn-primary">
+                <i data-lucide="mail"></i>
+                Request Quote
+            </a>
+            <a href="{{ url_for('products_page') }}" class="btn btn-outline">
+                <i data-lucide="package"></i>
+                View Products
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Products Section -->
+<section class="section" style="background: var(--bg-light);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">
+                <i data-lucide="package"></i>
+                Our Products
+            </span>
+            <h2 class="section-title">Industrial Fasteners We Manufacture</h2>
+            <p class="section-subtitle">
+                Comprehensive range of precision-engineered fasteners for diverse industrial applications.
+            </p>
+        </div>
+        <div class="products-grid">
+            <div class="product-item">
+                <h4>Hex Bolts</h4>
+                <p>DIN 933, ISO 4017 hex bolts in various grades and sizes.</p>
+                <ul>
+                    <li>M6 to M36 sizes</li>
+                    <li>Stainless Steel, Carbon Steel</li>
+                    <li>Custom lengths available</li>
+                </ul>
+            </div>
+            <div class="product-item">
+                <h4>Hex Nuts</h4>
+                <p>DIN 934, ISO 4032 hex nuts for secure fastening.</p>
+                <ul>
+                    <li>M4 to M36 sizes</li>
+                    <li>Stainless Steel, Steel</li>
+                    <li>Various thread specifications</li>
+                </ul>
+            </div>
+            <div class="product-item">
+                <h4>Washers</h4>
+                <p>Flat washers, spring washers for vibration resistance.</p>
+                <ul>
+                    <li>DIN 125, DIN 127 standards</li>
+                    <li>Multiple materials</li>
+                    <li>Various sizes and grades</li>
+                </ul>
+            </div>
+            <div class="product-item">
+                <h4>Socket Screws</h4>
+                <p>Socket head cap screws, set screws for precision applications.</p>
+                <ul>
+                    <li>DIN 912, ISO 4762</li>
+                    <li>Socket flat head screws</li>
+                    <li>Socket set screws</li>
+                </ul>
+            </div>
+            <div class="product-item">
+                <h4>Custom Fasteners</h4>
+                <p>Specialized fasteners designed to your specifications.</p>
+                <ul>
+                    <li>Custom dimensions</li>
+                    <li>Special materials</li>
+                    <li>Prototype to production</li>
+                </ul>
+            </div>
+            <div class="product-item">
+                <h4>CNC Machined Parts</h4>
+                <p>Precision turned and milled components.</p>
+                <ul>
+                    <li>Tolerances to ±0.01mm</li>
+                    <li>Various materials</li>
+                    <li>Complex geometries</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Advantages Section -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">
+                <i data-lucide="award"></i>
+                Why Choose Us
+            </span>
+            <h2 class="section-title">Why Choose Nirmal Precision as Your Fastener Manufacturer</h2>
+        </div>
+        <div class="advantages-grid">
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <i data-lucide="shield-check"></i>
+                </div>
+                <h4>ISO 9001:2015 Certified</h4>
+                <p>Our quality management system ensures consistent product quality with rigorous inspection at every stage of production.</p>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <i data-lucide="globe"></i>
+                </div>
+                <h4>Global Export Expertise</h4>
+                <p>25+ years of experience exporting to 80+ countries with complete documentation, customs support, and reliable logistics.</p>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <i data-lucide="settings"></i>
+                </div>
+                <h4>Precision Manufacturing</h4>
+                <p>Advanced CNC machines achieve tolerances down to ±0.01mm, ensuring precise fit and function for critical applications.</p>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <i data-lucide="truck"></i>
+                </div>
+                <h4>Flexible MOQ & Lead Times</h4>
+                <p>Competitive minimum order quantities and efficient production allow for both small prototype runs and large-scale orders.</p>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <i data-lucide="file-check"></i>
+                </div>
+                <h4>Complete Documentation</h4>
+                <p>We provide Material Test Reports (MTR), Certificate of Origin, PPAP documentation, and full traceability.</p>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <i data-lucide="headphones"></i>
+                </div>
+                <h4>Dedicated Support</h4>
+                <p>Responsive sales team with technical expertise to help you select the right fasteners for your application.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Industries Section -->
+<section class="section" style="background: var(--bg-light);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">
+                <i data-lucide="building-2"></i>
+                Industries Served
+            </span>
+            <h2 class="section-title">Industries We Supply</h2>
+            <p class="section-subtitle">
+                Our precision fasteners serve critical applications across diverse industrial sectors.
+            </p>
+        </div>
+        <div class="grid grid-4">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="car"></i>
+                </div>
+                <h4 class="feature-title">Automotive</h4>
+                <p class="feature-text">Engine components, chassis, and assembly fasteners.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="plane"></i>
+                </div>
+                <h4 class="feature-title">Aerospace</h4>
+                <p class="feature-text">Lightweight, high-strength fasteners for aircraft.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="cpu"></i>
+                </div>
+                <h4 class="feature-title">Electronics</h4>
+                <p class="feature-text">Precision components for electronic assemblies.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="heart-pulse"></i>
+                </div>
+                <h4 class="feature-title">Medical</h4>
+                <p class="feature-text">Surgical instruments and medical device fasteners.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="building"></i>
+                </div>
+                <h4 class="feature-title">Construction</h4>
+                <p class="feature-text">Structural fasteners for buildings and infrastructure.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="wind"></i>
+                </div>
+                <h4 class="feature-title">Renewable Energy</h4>
+                <p class="feature-text">Wind turbine and solar panel mounting fasteners.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="droplets"></i>
+                </div>
+                <h4 class="feature-title">Oil & Gas</h4>
+                <p class="feature-text">Corrosion-resistant fasteners for harsh environments.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="factory"></i>
+                </div>
+                <h4 class="feature-title">Industrial Machinery</h4>
+                <p class="feature-text">Heavy-duty fasteners for industrial equipment.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">
+                <i data-lucide="help-circle"></i>
+                FAQ
+            </span>
+            <h2 class="section-title">Frequently Asked Questions</h2>
+        </div>
+        <div class="grid grid-2" style="gap: 24px; margin-top: 32px;">
+            <div class="feature-card">
+                <h4 class="feature-title">What types of fasteners do you manufacture?</h4>
+                <p class="feature-text">We manufacture hex bolts, nuts, washers, screws, custom fasteners, and precision CNC machined components in sizes from M4 to M36.</p>
+            </div>
+            <div class="feature-card">
+                <h4 class="feature-title">What materials are available?</h4>
+                <p class="feature-text">We offer stainless steel (SS 304, SS 316), carbon steel, alloy steel, and specialty alloys. Surface treatments include zinc plating, passivation, and more.</p>
+            </div>
+            <div class="feature-card">
+                <h4 class="feature-title">What standards do you follow?</h4>
+                <p class="feature-text">We comply with DIN, ISO, ASTM, and custom specifications. Common standards include DIN 933, DIN 934, DIN 125, DIN 127, and DIN 912.</p>
+            </div>
+            <div class="feature-card">
+                <h4 class="feature-title">What is your minimum order quantity?</h4>
+                <p class="feature-text">MOQ varies by product type. Standard fasteners start at 100 pieces. Custom precision components have different requirements. Contact us for specific quotes.</p>
+            </div>
+            <div class="feature-card">
+                <h4 class="feature-title">Do you export globally?</h4>
+                <p class="feature-text">Yes, we export to 80+ countries including USA, Germany, UK, France, Italy, Netherlands, Sweden, Canada, Australia, and UAE with complete documentation.</p>
+            </div>
+            <div class="feature-card">
+                <h4 class="feature-title">Can you produce custom fasteners?</h4>
+                <p class="feature-text">Yes, we specialize in custom fasteners and precision components. Send your specifications and we'll provide a detailed quote within 24 hours.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="cta-bg"></div>
+    <div class="container">
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to Source Fasteners from India?</h2>
+            <p class="cta-text">
+                Get a competitive quote within 24 hours. Our export team is ready to discuss your requirements.
+            </p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('contact') }}" class="btn btn-white">
+                    <i data-lucide="mail"></i>
+                    Request Quote
+                </a>
+                <a href="{{ url_for('products_page') }}" class="btn" style="background: transparent; border: 2px solid white; color: white;">
+                    <i data-lucide="package"></i>
+                    Browse Products
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

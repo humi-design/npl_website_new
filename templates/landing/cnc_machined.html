@@ -1,0 +1,401 @@
+{% extends "base.html" %}
+
+{% block title %}CNC Machined Parts Manufacturer India | Precision CNC Machining | Nirmal Precision{% endblock %}
+{% block meta_title %}CNC Machined Parts Manufacturer India - Precision CNC Turning & Milling | Nirmal Precision{% endblock %}
+{% block meta_description %}Expert CNC machined parts manufacturer in India. Precision CNC turning and milling services with tolerances to ±0.01mm. ISO 9001:2015 certified. Custom components, prototypes, and production runs. Global export available.{% endblock %}
+{% block meta_keywords %}CNC machined parts India, precision CNC machining, CNC turning, CNC milling, custom machined components, India CNC manufacturer, precision parts machining{% endblock %}
+{% block canonical_url %}https://nirmalprecision.com/cnc-machined-parts-manufacturer{% endblock %}
+{% block og_type %}website{% endblock %}
+{% block og_title %}CNC Machined Parts Manufacturer India | Precision CNC Machining | Nirmal Precision{% endblock %}
+{% block og_description %}Expert CNC machined parts manufacturer in India. Precision CNC turning and milling with tolerances to ±0.01mm. ISO 9001:2015 certified.{% endblock %}
+{% block og_url %}https://nirmalprecision.com/cnc-machined-parts-manufacturer{% endblock %}
+{% block og_image %}https://nirmalprecision.com/static/img/og-cnc-machined.jpg{% endblock %}
+{% block twitter_title %}CNC Machined Parts Manufacturer India | Nirmal Precision{% endblock %}
+{% block twitter_description %}Expert CNC machined parts manufacturer in India. Precision CNC turning and milling with tolerances to ±0.01mm.{% endblock %}
+{% block twitter_url %}https://nirmalprecision.com/cnc-machined-parts-manufacturer{% endblock %}
+{% block twitter_image %}https://nirmalprecision.com/static/img/og-cnc-machined.jpg{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://nirmalprecision.com/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "CNC Machined Parts",
+            "item": "https://nirmalprecision.com/cnc-machined-parts-manufacturer"
+        }
+    ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.landing-hero {
+    padding: 120px 0 80px;
+    background: linear-gradient(135deg, var(--bg-light) 0%, var(--white) 100%);
+}
+
+.landing-hero::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 50%;
+    height: 150%;
+    background: linear-gradient(135deg, rgba(10, 77, 156, 0.08) 0%, rgba(30, 136, 229, 0.1) 100%);
+    border-radius: 50%;
+    filter: blur(80px);
+}
+
+.landing-hero h1 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.landing-hero p {
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin-bottom: 24px;
+}
+
+.highlight-text {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    margin-top: 48px;
+}
+
+.spec-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.spec-card:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
+}
+
+.spec-value {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.spec-label {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.capabilities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+    margin-top: 48px;
+}
+
+.capability-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    transition: var(--transition);
+}
+
+.capability-card:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+}
+
+.capability-icon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.capability-icon i {
+    width: 28px;
+    height: 28px;
+    color: var(--white);
+}
+
+.capability-card h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.capability-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.materials-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.material-item {
+    background: var(--bg-light);
+    border-radius: var(--radius);
+    padding: 16px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.material-item::before {
+    content: '✓';
+    color: var(--success);
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .landing-hero h1 {
+        font-size: 32px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="landing-hero">
+    <div class="container">
+        <span class="section-label">
+            <i data-lucide="settings"></i>
+            CNC Machining
+        </span>
+        <h1><span class="highlight-text">CNC Machined Parts</span> Manufacturer in India</h1>
+        <p>
+            Nirmal Precision is your trusted partner for precision CNC machined parts. Our state-of-the-art CNC turning and milling centers deliver tolerances down to ±0.01mm for critical applications across aerospace, automotive, medical, and industrial sectors.
+        </p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('contact') }}" class="btn btn-primary">
+                <i data-lucide="mail"></i>
+                Request Quote
+            </a>
+            <a href="{{ url_for('products_page') }}" class="btn btn-outline">
+                <i data-lucide="package"></i>
+                View Products
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Specifications Section -->
+<section class="section" style="background: var(--bg-light);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">
+                <i data-lucide="ruler"></i>
+                Capabilities
+            </span>
+            <h2 class="section-title">Our CNC Machining Specifications</h2>
+        </div>
+        <div class="specs-grid">
+            <div class="spec-card">
+                <div class="spec-value">±0.01mm</div>
+                <div class="spec-label">Tolerance Capability</div>
+            </div>
+            <div class="spec-card">
+                <div class="spec-value">M4-M36</div>
+                <div class="spec-label">Size Range</div>
+            </div>
+            <div class="spec-card">
+                <div class="spec-value">50+</div>
+                <div class="spec-label">Machine Capacity</div>
+            </div>
+            <div class="spec-card">
+                <div class="spec-value">1500+</div>
+                <div class="spec-label">Monthly Capacity (Tons)</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Capabilities Section -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">
+                <i data-lucide="settings"></i>
+                Services
+            </span>
+            <h2 class="section-title">CNC Machining Services</h2>
+            <p class="section-subtitle">
+                From prototype to production, we offer comprehensive CNC machining solutions.
+            </p>
+        </div>
+        <div class="capabilities-grid">
+            <div class="capability-card">
+                <div class="capability-icon">
+                    <i data-lucide="rotate-cw"></i>
+                </div>
+                <h4>CNC Turning</h4>
+                <p>High-precision CNC turning for cylindrical components. Features include multi-axis turning, threading, grooving, and parting operations for complex geometries.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">
+                    <i data-lucide="move"></i>
+                </div>
+                <h4>CNC Milling</h4>
+                <p>3-axis and 4-axis milling for complex shapes. Features include pocketing, profiling, drilling, and contouring with excellent surface finishes.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">
+                    <i data-lucide="file-check"></i>
+                </div>
+                <h4>Quality Inspection</h4>
+                <p>100% dimensional verification using CMM, micrometers, bore gauges, and optical comparators. Full documentation and certificates provided.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">
+                    <i data-lucide="palette"></i>
+                </div>
+                <h4>Surface Treatment</h4>
+                <p>Complete finishing services including zinc plating, passivation, electropolishing, anodizing, and powder coating for corrosion resistance.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">
+                    <i data-lucide="box"></i>
+                </div>
+                <h4>Custom Packaging</h4>
+                <p>Export-ready packaging with polybags, labels, and traceability documentation for seamless customs clearance worldwide.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">
+                    <i data-lucide="headphones"></i>
+                </div>
+                <h4>Technical Support</h4>
+                <p>Dedicated engineering support for material selection, tolerance analysis, and DFMEA to optimize your designs for manufacturing.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Materials Section -->
+<section class="section" style="background: var(--bg-light);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">
+                <i data-lucide="layers"></i>
+                Materials
+            </span>
+            <h2 class="section-title">Materials We Machine</h2>
+        </div>
+        <div class="materials-list">
+            <div class="material-item">Stainless Steel 304/304L</div>
+            <div class="material-item">Stainless Steel 316/316L</div>
+            <div class="material-item">Stainless Steel 303</div>
+            <div class="material-item">Carbon Steel (AISI 1018, 1045)</div>
+            <div class="material-item">Alloy Steel (4140, 4340)</div>
+            <div class="material-item">Brass (C360, C385)</div>
+            <div class="material-item">Aluminum (6061, 7075)</div>
+            <div class="material-item">Copper and Bronze</div>
+            <div class="material-item">Titanium (Grade 2, Grade 5)</div>
+            <div class="material-item">Special Alloys on request</div>
+        </div>
+    </div>
+</section>
+
+<!-- Industries Section -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">
+                <i data-lucide="building-2"></i>
+                Industries
+            </span>
+            <h2 class="section-title">Industries We Serve</h2>
+        </div>
+        <div class="grid grid-4" style="margin-top: 32px;">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="car"></i>
+                </div>
+                <h4 class="feature-title">Automotive</h4>
+                <p class="feature-text">Engine components, transmission parts, suspension fasteners.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="plane"></i>
+                </div>
+                <h4 class="feature-title">Aerospace</h4>
+                <p class="feature-text">Lightweight components meeting AS9100D standards.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="heart-pulse"></i>
+                </div>
+                <h4 class="feature-title">Medical</h4>
+                <p class="feature-text">Surgical instruments, implants, diagnostic equipment.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="cpu"></i>
+                </div>
+                <h4 class="feature-title">Electronics</h4>
+                <p class="feature-text">Connectors, heat sinks, precision enclosures.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="cta-bg"></div>
+    <div class="container">
+        <div class="cta-content">
+            <h2 class="cta-title">Need Precision CNC Machined Parts?</h2>
+            <p class="cta-text">
+                Get a detailed quote within 24 hours. Share your drawings (PDF, STEP, DXF) and specifications.
+            </p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('contact') }}" class="btn btn-white">
+                    <i data-lucide="mail"></i>
+                    Request Quote
+                </a>
+                <a href="{{ url_for('products_page') }}" class="btn" style="background: transparent; border: 2px solid white; color: white;">
+                    <i data-lucide="package"></i>
+                    View Products
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

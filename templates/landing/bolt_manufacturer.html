@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Bolt Manufacturer India | Hex Bolts & Industrial Bolts Export | Nirmal Precision{% endblock %}
+{% block meta_title %}Bolt Manufacturer India - Hex Bolts & Industrial Bolts Exporter | Nirmal Precision{% endblock %}
+{% block meta_description %}Leading bolt manufacturer in India. We produce hex bolts, DIN 933 bolts, flange bolts, and custom industrial bolts. Stainless steel and carbon steel options. ISO 9001:2015 certified. Global export to 80+ countries.{% endblock %}
+{% block meta_keywords %}bolt manufacturer India, hex bolt manufacturer, DIN 933 bolts, flange bolts India, industrial bolts, stainless steel bolts, carbon steel bolts, India bolt export{% endblock %}
+{% block canonical_url %}https://nirmalprecision.com/bolt-manufacturer-india{% endblock %}
+{% block og_type %}website{% endblock %}
+{% block og_title %}Bolt Manufacturer India | Hex Bolts & Industrial Bolts Export | Nirmal Precision{% endblock %}
+{% block og_description %}Leading bolt manufacturer in India. ISO 9001:2015 certified. Export to 80+ countries.{% endblock %}
+{% block og_url %}https://nirmalprecision.com/bolt-manufacturer-india{% endblock %}
+{% block og_image %}https://nirmalprecision.com/static/img/og-bolt-manufacturer.jpg{% endblock %}
+{% block twitter_title %}Bolt Manufacturer India | Nirmal Precision{% endblock %}
+{% block twitter_description %}Leading bolt manufacturer in India. ISO 9001:2015 certified. Export to 80+ countries.{% endblock %}
+{% block twitter_url %}https://nirmalprecision.com/bolt-manufacturer-india{% endblock %}
+{% block twitter_image %}https://nirmalprecision.com/static/img/og-bolt-manufacturer.jpg{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://nirmalprecision.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Bolt Manufacturer India", "item": "https://nirmalprecision.com/bolt-manufacturer-india"}
+    ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.landing-hero { padding: 120px 0 80px; background: linear-gradient(135deg, var(--bg-light) 0%, var(--white) 100%); }
+.landing-hero::before { content: ''; position: absolute; top: -30%; right: -10%; width: 50%; height: 150%; background: linear-gradient(135deg, rgba(10, 77, 156, 0.08) 0%, rgba(30, 136, 229, 0.1) 100%); border-radius: 50%; filter: blur(80px); }
+.landing-hero h1 { font-size: 48px; font-weight: 800; margin-bottom: 20px; line-height: 1.2; }
+.landing-hero p { font-size: 18px; color: var(--text-muted); max-width: 600px; margin-bottom: 24px; }
+.highlight-text { color: var(--primary); font-weight: 700; }
+.bolts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 48px; }
+.bolt-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; transition: var(--transition); }
+.bolt-card:hover { border-color: var(--primary); box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+.bolt-card h4 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.bolt-card p { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; }
+.bolt-specs { display: flex; flex-wrap: wrap; gap: 8px; }
+.bolt-spec { background: var(--bg-light); padding: 4px 12px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 500; }
+@media (max-width: 768px) { .landing-hero h1 { font-size: 32px; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="landing-hero" style="position: relative; overflow: hidden;">
+    <div class="container">
+        <span class="section-label"><i data-lucide="wrench"></i>Bolt Manufacturer India</span>
+        <h1>Leading <span class="highlight-text">Bolt Manufacturer in India</span> Since 1997</h1>
+        <p>Nirmal Precision is a premier industrial bolt manufacturer in India, producing high-quality hex bolts, DIN 933 bolts, flange bolts, and custom bolts. ISO 9001:2015 certified with global export to 80+ countries.</p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('contact') }}" class="btn btn-primary"><i data-lucide="mail"></i>Request Quote</a>
+            <a href="{{ url_for('products_page') }}" class="btn btn-outline"><i data-lucide="package"></i>View Products</a>
+        </div>
+    </div>
+</section>
+
+<section class="section" style="background: var(--bg-light);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label"><i data-lucide="package"></i>Our Products</span>
+            <h2 class="section-title">Industrial Bolts We Manufacture</h2>
+        </div>
+        <div class="bolts-grid">
+            <div class="bolt-card">
+                <h4>Hex Bolts DIN 933</h4>
+                <p>Standard hex head bolts for general purpose applications.</p>
+                <div class="bolt-specs">
+                    <span class="bolt-spec">M6-M36</span>
+                    <span class="bolt-spec">SS 304/316</span>
+                    <span class="bolt-spec">Carbon Steel</span>
+                </div>
+            </div>
+            <div class="bolt-card">
+                <h4>Hex Flange Bolts</h4>
+                <p>Bolts with integrated flange for enhanced load distribution.</p>
+                <div class="bolt-specs">
+                    <span class="bolt-spec">M8-M24</span>
+                    <span class="bolt-spec">Grade 8.8/10.9</span>
+                    <span class="bolt-spec">Zinc Plated</span>
+                </div>
+            </div>
+            <div class="bolt-card">
+                <h4>Socket Head Bolts</h4>
+                <p>DIN 912 socket head cap screws for precision applications.</p>
+                <div class="bolt-specs">
+                    <span class="bolt-spec">M4-M24</span>
+                    <span class="bolt-spec"> Alloy Steel</span>
+                    <span class="bolt-spec">Grade 12.9</span>
+                </div>
+            </div>
+            <div class="bolt-card">
+                <h4>Carriage Bolts</h4>
+                <p>Round head square neck bolts for wood and metal applications.</p>
+                <div class="bolt-specs">
+                    <span class="bolt-spec">M6-M20</span>
+                    <span class="bolt-spec">Hot Dipped Galvanized</span>
+                    <span class="bolt-spec">Grade 4.8</span>
+                </div>
+            </div>
+            <div class="bolt-card">
+                <h4>Eye Bolts</h4>
+                <p>Shoulder eye bolts for lifting and rigging applications.</p>
+                <div class="bolt-specs">
+                    <span class="bolt-spec">M8-M30</span>
+                    <span class="bolt-spec">SS 316</span>
+                    <span class="bolt-spec">Forged</span>
+                </div>
+            </div>
+            <div class="bolt-card">
+                <h4>Custom Bolts</h4>
+                <p>Special bolts manufactured to your exact specifications.</p>
+                <div class="bolt-specs">
+                    <span class="bolt-spec">Custom Sizes</span>
+                    <span class="bolt-spec">Special Materials</span>
+                    <span class="bolt-spec">Prototypes</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label"><i data-lucide="award"></i>Why Choose Us</span>
+            <h2 class="section-title">Why Choose Nirmal Precision as Your Bolt Supplier</h2>
+        </div>
+        <div class="grid grid-3" style="margin-top: 32px;">
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="shield-check"></i></div>
+                <h4 class="feature-title">ISO 9001:2015 Certified</h4>
+                <p class="feature-text">Quality management system ensuring consistent product quality with 100% inspection.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="globe"></i></div>
+                <h4 class="feature-title">Global Export</h4>
+                <p class="feature-text">25+ years exporting to 80+ countries with complete documentation and reliable logistics.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="settings"></i></div>
+                <h4 class="feature-title">Precision Manufacturing</h4>
+                <p class="feature-text">CNC machines ensure precise dimensions and consistent quality batch after batch.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="cta-bg"></div>
+    <div class="container">
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to Source Bolts from India?</h2>
+            <p class="cta-text">Get a competitive quote within 24 hours. Our export team is ready to help.</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('contact') }}" class="btn btn-white"><i data-lucide="mail"></i>Request Quote</a>
+                <a href="{{ url_for('products_page') }}" class="btn" style="background: transparent; border: 2px solid white; color: white;"><i data-lucide="package"></i>Browse Products</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
