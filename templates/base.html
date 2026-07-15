@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Nirmal Precision | Precision Engineering & Global Export{% endblock %}</title>
+<meta name="description" content="Leading manufacturer and exporter of precision turned components, CNC turned parts, industrial fasteners, and custom machined components. ISO 9001:2015 certified. Global export to 80+ countries.">
+<meta name="keywords" content="precision turned components, CNC parts, industrial fasteners, custom machined components, brass components, stainless steel fasteners, global export">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/premium.min.css') }}">
+
+{% block extra_css %}{% endblock %}
+</head>
+
+<body>
+<!-- Preloader -->
+<div class="preloader" id="preloader">
+    <div class="preloader-content">
+        <div class="preloader-logo">
+            <span class="logo-np">NPL</span>
+        </div>
+        <div class="preloader-bar">
+            <div class="preloader-progress"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Top Bar -->
+<div class="top-bar">
+    <div class="container">
+        <div class="top-bar-content">
+            <div class="top-bar-left">
+                <span class="top-bar-item">
+                    <i data-lucide="shield-check" class="icon-sm"></i>
+                    ISO 9001:2015 Certified
+                </span>
+                <span class="top-bar-divider">|</span>
+                <span class="top-bar-item">
+                    <i data-lucide="globe" class="icon-sm"></i>
+                    Global Export to 25+ Countries
+                </span>
+            </div>
+            <div class="top-bar-right">
+                <a href="mailto:sales@nirmalprecision.com" class="top-bar-link">
+                    <i data-lucide="mail" class="icon-sm"></i>
+                    sales@nirmalprecision.com
+                </a>
+                <span class="top-bar-divider">|</span>
+                <a href="tel:+919029531035" class="top-bar-link">
+                    <i data-lucide="phone" class="icon-sm"></i>
+                    +91 9029531035 / 8424849942
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Navigation -->
+<header class="navbar" id="navbar">
+    <div class="container">
+        <nav class="nav-container">
+            <a href="{{ url_for('home') }}" class="nav-logo">
+                <div class="logo-icon"><span>NPL</span></div>
+                <div class="logo-text">
+                    <span class="logo-name">NIRMAL</span>
+                    <span class="logo-sub">PRECISION</span>
+                </div>
+            </a>
+
+            <div class="nav-menu" id="navMenu">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="{{ url_for('home') }}" class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">Home</a>
+                    </li>
+                    <li class="nav-item has-mega-menu">
+                        <a href="{{ url_for('products_page') }}" class="nav-link {% if request.endpoint == 'products_page' %}active{% endif %}">
+                            Products
+                            <i data-lucide="chevron-down" class="nav-arrow"></i>
+                        </a>
+                        <div class="mega-menu">
+                            <div class="mega-menu-inner">
+                                <div class="mega-menu-header">
+                                    <h4>Product Categories</h4>
+                                    <p>Explore our comprehensive range of precision-engineered components</p>
+                                </div>
+                                <div class="mega-menu-grid">
+                                    {% if categories %}
+                                    {% for cat in categories[:8] %}
+                                    <a href="{{ url_for('products_page', category=cat.name) }}" class="mega-menu-item">
+                                        <div class="mega-menu-icon"><i data-lucide="settings"></i></div>
+                                        <div class="mega-menu-content">
+                                            <span class="mega-menu-title">{{ cat.name }}</span>
+                                            <span class="mega-menu-desc">View all products</span>
+                                        </div>
+                                    </a>
+                                    {% endfor %}
+                                    {% endif %}
+                                    <a href="{{ url_for('products_page') }}" class="mega-menu-item mega-menu-cta">
+                                        <div class="mega-menu-icon"><i data-lucide="arrow-right"></i></div>
+                                        <div class="mega-menu-content">
+                                            <span class="mega-menu-title">View All Products</span>
+                                            <span class="mega-menu-desc">Browse full catalog</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item has-dropdown">
+                        <a href="{{ url_for('export') }}" class="nav-link {% if request.endpoint == 'export' %}active{% endif %}">
+                            Export
+                            <i data-lucide="chevron-down" class="nav-arrow"></i>
+                        </a>
+                        <div class="dropdown">
+                            <a href="{{ url_for('export') }}" class="dropdown-item"><i data-lucide="ship"></i><span>Export Capabilities</span></a>
+                            <a href="{{ url_for('contact') }}" class="dropdown-item"><i data-lucide="file-text"></i><span>Documentation</span></a>
+                            <a href="{{ url_for('contact') }}" class="dropdown-item"><i data-lucide="package"></i><span>Packaging Standards</span></a>
+                            <a href="{{ url_for('contact') }}" class="dropdown-item"><i data-lucide="truck"></i><span>Logistics Partners</span></a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('about') }}" class="nav-link {% if request.endpoint == 'about' %}active{% endif %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('contact') }}" class="nav-link {% if request.endpoint == 'contact' %}active{% endif %}">Contact</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="nav-actions">
+                <button class="nav-search-btn" id="searchBtn" aria-label="Search">
+                    <i data-lucide="search"></i>
+                </button>
+                <a href="{{ url_for('compare') }}" class="nav-icon-btn" aria-label="Compare">
+                    <i data-lucide="git-compare"></i>
+                    <span class="nav-badge" id="compareBadge">{{ compare|length if compare else 0 }}</span>
+                </a>
+                <a href="{{ url_for('cart') }}" class="nav-cart-btn" id="cartBtn">
+                    <i data-lucide="clipboard-list"></i>
+                    <span class="nav-badge">{{ cart_count }}</span>
+                </a>
+                <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- Search Overlay -->
+<div class="search-overlay" id="searchOverlay">
+    <div class="search-container">
+        <div class="search-header">
+            <h3>Search Products</h3>
+            <button class="search-close" id="searchClose"><i data-lucide="x"></i></button>
+        </div>
+        <form action="{{ url_for('products_page') }}" method="get" class="search-form">
+            <div class="search-input-wrapper">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" name="search" placeholder="Search by part number, name, or specification..." class="search-input" autofocus>
+            </div>
+            <div class="search-suggestions">
+                <span class="search-label">Popular:</span>
+                <a href="{{ url_for('products_page', category='Fasteners') }}" class="search-tag">Fasteners</a>
+                <a href="{{ url_for('products_page', category='CNC Parts') }}" class="search-tag">CNC Parts</a>
+                <a href="{{ url_for('products_page', category='Brass Components') }}" class="search-tag">Brass Components</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Mobile Navigation -->
+<div class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-header">
+        <a href="{{ url_for('home') }}" class="mobile-logo">
+            <div class="logo-icon"><span>NPL</span></div>
+            <div class="logo-text">
+                <span class="logo-name">NIRMAL</span>
+                <span class="logo-sub">PRECISION</span>
+            </div>
+        </a>
+        <button class="mobile-nav-close" id="mobileClose"><i data-lucide="x"></i></button>
+    </div>
+    <div class="mobile-nav-body">
+        <nav class="mobile-nav-links">
+            <a href="{{ url_for('home') }}" class="mobile-nav-link {% if request.endpoint == 'home' %}active{% endif %}"><i data-lucide="home"></i><span>Home</span></a>
+            <a href="{{ url_for('products_page') }}" class="mobile-nav-link {% if request.endpoint == 'products_page' %}active{% endif %}"><i data-lucide="package"></i><span>Products</span></a>
+            <a href="{{ url_for('export') }}" class="mobile-nav-link {% if request.endpoint == 'export' %}active{% endif %}"><i data-lucide="globe"></i><span>Export</span></a>
+            <a href="{{ url_for('about') }}" class="mobile-nav-link {% if request.endpoint == 'about' %}active{% endif %}"><i data-lucide="building"></i><span>About</span></a>
+            <a href="{{ url_for('contact') }}" class="mobile-nav-link {% if request.endpoint == 'contact' %}active{% endif %}"><i data-lucide="mail"></i><span>Contact</span></a>
+        </nav>
+        <div class="mobile-nav-footer">
+            <a href="{{ url_for('cart') }}" class="mobile-nav-cta"><i data-lucide="clipboard-list"></i><span>RFQ Cart ({{ cart_count }})</span></a>
+        </div>
+    </div>
+</div>
+<div class="mobile-nav-overlay" id="mobileOverlay"></div>
+
+<!-- Main Content -->
+<main class="main-content">
+{% block content %}{% endblock %}
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-main">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col footer-brand">
+                    <a href="{{ url_for('home') }}" class="footer-logo">
+                        <div class="logo-icon"><span>NPL</span></div>
+                        <div class="logo-text">
+                            <span class="logo-name">NIRMAL</span>
+                            <span class="logo-sub">PRECISION</span>
+                        </div>
+                    </a>
+                    <p class="footer-about">Leading manufacturer and exporter of precision turned components, CNC turned parts, industrial fasteners, and custom machined components. Trusted global partner since 1997.</p>
+                    <div class="footer-certifications">
+                        <span class="cert-badge">ISO 9001:2015</span>
+                        <span class="cert-badge">RoHS</span>
+                        <span class="cert-badge">REACH</span>
+                    </div>
+                    <div class="footer-social">
+                        <a href="#" class="social-link" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
+                        <a href="#" class="social-link" aria-label="Twitter"><i data-lucide="twitter"></i></a>
+                        <a href="#" class="social-link" aria-label="YouTube"><i data-lucide="youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Products</h4>
+                    <ul class="footer-links">
+                        {% if categories %}
+                        {% for cat in categories[:6] %}
+                        <li><a href="{{ url_for('products_page', category=cat.name) }}">{{ cat.name }}</a></li>
+                        {% endfor %}
+                        {% endif %}
+                        <li><a href="{{ url_for('products_page') }}">View All Products</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('about') }}">About Us</a></li>
+                        <li><a href="{{ url_for('export') }}">Export Capabilities</a></li>
+                        <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+                        <li><a href="{{ url_for('compare') }}">Compare Products</a></li>
+                        <li><a href="{{ url_for('cart') }}">Request Quote</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Industries</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('products_page') }}">Automotive</a></li>
+                        <li><a href="{{ url_for('products_page') }}">Aerospace</a></li>
+                        <li><a href="{{ url_for('products_page') }}">Electrical & Electronics</a></li>
+                        <li><a href="{{ url_for('products_page') }}">Medical</a></li>
+                        <li><a href="{{ url_for('products_page') }}">Construction</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Contact Us</h4>
+                    <div class="footer-contact">
+                        <div class="contact-item">
+                            <i data-lucide="map-pin"></i>
+                            <div>
+                                <span class="contact-label">Address</span>
+                                <p>A-12, Priya Industrial Estate, Mumbai, 401105, India</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i data-lucide="phone"></i>
+                            <div>
+                                <span class="contact-label">Phone</span>
+                                <a href="tel:+919029531035">+91 9029531035</a>
+                            </div>
+                            <div>
+                                <span class="contact-label">Phone</span>
+                                <a href="tel:+918424849942">+91 8424849942</a>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i data-lucide="mail"></i>
+                            <div>
+                                <span class="contact-label">Email</span>
+                                <a href="mailto:sales@nirmalprecision.com">sales@nirmalprecision.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <div class="newsletter-text">
+                    <h4>Stay Updated</h4>
+                    <p>Subscribe to receive updates on new products and industry insights</p>
+                </div>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit" class="newsletter-btn"><i data-lucide="send"></i> Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <div class="footer-bottom-content">
+                <p>&copy; 2026 Nirmal Precision Pvt. Ltd. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+                    <span>|</span>
+                    <a href="{{ url_for('terms') }}">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Back to Top -->
+<button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i data-lucide="arrow-up"></i>
+</button>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    lucide.createIcons();
+    AOS.init({ duration: 800, easing: 'ease-out-cubic', once: true, offset: 50 });
+    setTimeout(function() { document.getElementById('preloader').classList.add('loaded'); }, 800);
+
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', function() {
+        navbar.classList.toggle('scrolled', window.pageYOffset > 100);
+    });
+
+    const mobileToggle = document.getElementById('mobileToggle');
+    const mobileNav = document.getElementById('mobileNav');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const mobileClose = document.getElementById('mobileClose');
+    mobileToggle.addEventListener('click', function() { mobileNav.classList.add('active'); mobileOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; });
+    mobileClose.addEventListener('click', function() { mobileNav.classList.remove('active'); mobileOverlay.classList.remove('active'); document.body.style.overflow = ''; });
+    mobileOverlay.addEventListener('click', function() { mobileNav.classList.remove('active'); mobileOverlay.classList.remove('active'); document.body.style.overflow = ''; });
+
+    const searchBtn = document.getElementById('searchBtn');
+    const searchOverlay = document.getElementById('searchOverlay');
+    const searchClose = document.getElementById('searchClose');
+    searchBtn.addEventListener('click', function() { searchOverlay.classList.add('active'); document.querySelector('.search-input').focus(); });
+    searchClose.addEventListener('click', function() { searchOverlay.classList.remove('active'); });
+
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', function() { backToTop.classList.toggle('visible', window.pageYOffset > 500); });
+    backToTop.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+});
+</script>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

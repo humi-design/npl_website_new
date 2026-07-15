@@ -1,0 +1,447 @@
+{% extends "base.html" %}
+
+{% block title %}About Us | Nirmal Precision{% endblock %}
+
+{% block extra_css %}
+<style>
+.about-hero {
+    padding: 120px 0 80px;
+    background: linear-gradient(135deg, var(--bg-light) 0%, var(--white) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.about-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 60%;
+    height: 150%;
+    background: linear-gradient(135deg, rgba(10, 77, 156, 0.05) 0%, rgba(30, 136, 229, 0.08) 100%);
+    border-radius: 50%;
+    filter: blur(100px);
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.about-image {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+}
+
+.about-image img {
+    width: 100%;
+    height: auto;
+}
+
+.about-content h2 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.about-content p {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
+.about-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 32px;
+}
+
+.about-stat {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.about-stat:hover {
+    border-color: var(--primary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.about-stat h3 {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+
+.about-stat p {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+/* Timeline */
+.timeline-section {
+    background: var(--bg-light);
+}
+
+.timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--border);
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.timeline-item {
+    position: relative;
+    width: 50%;
+    padding: 0 40px 40px;
+}
+
+.timeline-item:nth-child(odd) {
+    left: 0;
+    text-align: right;
+}
+
+.timeline-item:nth-child(even) {
+    left: 50%;
+}
+
+.timeline-dot {
+    position: absolute;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    background: var(--primary);
+    border: 4px solid var(--white);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px var(--primary);
+}
+
+.timeline-item:nth-child(odd) .timeline-dot {
+    right: -12px;
+}
+
+.timeline-item:nth-child(even) .timeline-dot {
+    left: -12px;
+}
+
+.timeline-year {
+    display: inline-block;
+    padding: 4px 12px;
+    background: var(--primary);
+    color: var(--white);
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+}
+
+.timeline-content {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    transition: var(--transition);
+}
+
+.timeline-content:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.timeline-content h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.timeline-content p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* Values */
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.value-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.value-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+}
+
+.value-icon {
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.value-icon i {
+    width: 36px;
+    height: 36px;
+    color: var(--white);
+}
+
+.value-card h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.value-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .about-image {
+        order: -1;
+    }
+    
+    .timeline::before {
+        left: 12px;
+    }
+    
+    .timeline-item {
+        width: 100%;
+        left: 0 !important;
+        padding-left: 50px;
+        padding-right: 0;
+        text-align: left !important;
+    }
+    
+    .timeline-item .timeline-dot {
+        left: 0 !important;
+        right: auto !important;
+    }
+    
+    .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .about-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ===== HERO ===== -->
+<section class="about-hero">
+    <div class="container">
+        <div class="about-grid">
+            <div class="about-content" data-aos="fade-right">
+                <span class="section-label">
+                    <i data-lucide="building-2"></i>
+                    About Us
+                </span>
+                <h2>Precision Engineering Excellence Since 1997</h2>
+                <p>
+                    Nirmal Precision Pvt. Ltd., established in 1997 in Bhayandar, has been a trusted name in precision manufacturing. Strategically located near Mumbai, we benefit from excellent connectivity and logistics infrastructure.
+                </p>
+                <p>
+                    We specialize in manufacturing high-quality stainless steel and steel fasteners, machined components from M4 to M36, complying with international DIN standards. Our precision-engineered products serve diverse industries worldwide.
+                </p>
+                <div class="about-stats">
+                    <div class="about-stat">
+                        <h3>25+</h3>
+                        <p>Years Experience</p>
+                    </div>
+                    <div class="about-stat">
+                        <h3>1500+</h3>
+                        <p>Monthly Capacity (Tons)</p>
+                    </div>
+                    <div class="about-stat">
+                        <h3>0</h3>
+                        <p>PPM Defect Target</p>
+                    </div>
+                    <div class="about-stat">
+                        <h3>50K+</h3>
+                        <p>Products Delivered</p>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image" data-aos="fade-left">
+                <img src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800&q=80" alt="Precision Manufacturing">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== VALUES ===== -->
+<section class="section">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-label">
+                <i data-lucide="target"></i>
+                Our Values
+            </span>
+            <h2 class="section-title">What Drives Us</h2>
+        </div>
+        <div class="values-grid">
+            <div class="value-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="value-icon">
+                    <i data-lucide="shield-check"></i>
+                </div>
+                <h4>Quality First</h4>
+                <p>Zero-defect target with rigorous inspection at every stage of production.</p>
+            </div>
+            <div class="value-card" data-aos="fade-up" data-aos-delay="150">
+                <div class="value-icon">
+                    <i data-lucide="settings"></i>
+                </div>
+                <h4>Precision</h4>
+                <p>Tolerances down to ±0.01mm using advanced CNC machining centers.</p>
+            </div>
+            <div class="value-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="value-icon">
+                    <i data-lucide="truck"></i>
+                </div>
+                <h4>Reliability</h4>
+                <p>On-time delivery with complete documentation for seamless customs clearance.</p>
+            </div>
+            <div class="value-card" data-aos="fade-up" data-aos-delay="250">
+                <div class="value-icon">
+                    <i data-lucide="globe"></i>
+                </div>
+                <h4>Global Ready</h4>
+                <p>Exporting to 80+ countries with full compliance to international standards.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== TIMELINE ===== -->
+<section class="section timeline-section">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-label">
+                <i data-lucide="clock"></i>
+                Our Journey
+            </span>
+            <h2 class="section-title">Milestones in Excellence</h2>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item" data-aos="fade-up">
+                <div class="timeline-dot"></div>
+                <span class="timeline-year">1997</span>
+                <div class="timeline-content">
+                    <h4>Company Founded</h4>
+                    <p>Nirmal Precision established in Bhayandar, Mumbai, focusing on domestic fastener manufacturing.</p>
+                </div>
+            </div>
+            <div class="timeline-item" data-aos="fade-up">
+                <div class="timeline-dot"></div>
+                <span class="timeline-year">2006</span>
+                <div class="timeline-content">
+                    <h4>Strategic Rebranding</h4>
+                    <p>Transitioned to current identity with enhanced focus on precision turned components.</p>
+                </div>
+            </div>
+            <div class="timeline-item" data-aos="fade-up">
+                <div class="timeline-dot"></div>
+                <span class="timeline-year">2015</span>
+                <div class="timeline-content">
+                    <h4>Export Expansion</h4>
+                    <p>Entered international markets, supplying high-quality stainless steel components globally.</p>
+                </div>
+            </div>
+            <div class="timeline-item" data-aos="fade-up">
+                <div class="timeline-dot"></div>
+                <span class="timeline-year">2019</span>
+                <div class="timeline-content">
+                    <h4>Global Footprint</h4>
+                    <p>Expanded into European and American markets with full export compliance.</p>
+                </div>
+            </div>
+            <div class="timeline-item" data-aos="fade-up">
+                <div class="timeline-dot"></div>
+                <span class="timeline-year">2024</span>
+                <div class="timeline-content">
+                    <h4>Industry Leader</h4>
+                    <p>Trusted by 2000+ global clients across 80+ countries with ISO 9001:2015 certification.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-section">
+    <div class="cta-bg"></div>
+    <div class="container">
+        <div class="cta-content" data-aos="fade-up">
+            <h2 class="cta-title">Partner with Excellence</h2>
+            <p class="cta-text">
+                Ready to experience precision-engineered components? Contact our team for a custom quote.
+            </p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('contact') }}" class="btn btn-white">
+                    <i data-lucide="mail"></i>
+                    Contact Us
+                </a>
+                <a href="{{ url_for('products_page') }}" class="btn" style="background: transparent; border: 2px solid white; color: white;">
+                    <i data-lucide="package"></i>
+                    View Products
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

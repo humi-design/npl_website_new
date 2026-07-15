@@ -1,0 +1,97 @@
+<footer class="footer">
+  <div class="container footer-grid">
+
+    <!-- BRAND -->
+    <div>
+      <h4>PRECISIONBOLT</h4>
+      <p style="max-width:260px; line-height:1.6;">
+        Global leaders in manufacturing and exporting high-tensile precision fasteners.
+      </p>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div>
+      <h4>Products</h4>
+      <ul>
+        {% if categories %}
+          {% for cat in categories[:4] %}
+            <li>
+              <a href="{{ url_for('products_page', category=cat.name) }}">
+                {{ cat.name }}
+              </a>
+            </li>
+          {% endfor %}
+        {% else %}
+          <li>No categories available</li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <!-- RESOURCES -->
+    <div>
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="{{ url_for('products_page') }}">Engineering Tools</a></li>
+        <li><a href="{{ url_for('export') }}">Export Capabilities</a></li>
+        <li><a href="#">Industry Blog</a></li>
+        <li><a href="#">Certifications</a></li>
+      </ul>
+    </div>
+
+    <!-- COMPANY -->
+    <div>
+      <h4>Company</h4>
+      <ul>
+        <li><a href="{{ url_for('about') }}">About Us</a></li>
+        <li><a href="{{ url_for('contact') }}">Contact</a></li>
+        <li><a href="{{ url_for('compare') }}">Compare</a></li>
+        <li><a href="{{ url_for('cart') }}">Cart</a></li>
+      </ul>
+    </div>
+
+    <!-- CONTACT (WITH SVG ICONS) -->
+    <div>
+      <h4>Global HQ</h4>
+
+      <!-- EMAIL -->
+      <p style="display:flex; align-items:center; gap:6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+          <path d="M4 6h16v12H4z" stroke="#c7d0dc" stroke-width="2"/>
+          <path d="M4 6l8 6 8-6" stroke="#c7d0dc" stroke-width="2"/>
+        </svg>
+        <a href="mailto:export@precisionbolt.com">export@precisionbolt.com</a>
+      </p>
+
+      <!-- PHONE -->
+      <p style="display:flex; align-items:center; gap:6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2
+          19.79 19.79 0 0 1-8.63-3.07
+          19.5 19.5 0 0 1-6-6
+          19.79 19.79 0 0 1-3.07-8.67
+          A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72
+          12.84 12.84 0 0 0 .7 2.81
+          2 2 0 0 1-.45 2.11L8.09 9.91
+          a16 16 0 0 0 6 6l1.27-1.27
+          a2 2 0 0 1 2.11-.45
+          12.84 12.84 0 0 0 2.81.7
+          A2 2 0 0 1 22 16.92z"
+          stroke="#c7d0dc" stroke-width="2"/>
+        </svg>
+        <a href="tel:+18005550199">+1 800 555 0199</a>
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="footer-bottom">
+    <div>© 2026 PrecisionBolt. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+      <span>|</span>
+      <a href="{{ url_for('terms') }}">Terms of Service</a>
+    </div>
+  </div>
+</footer>

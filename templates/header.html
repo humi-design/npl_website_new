@@ -1,0 +1,48 @@
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="container flex">
+    <div>ISO 9001:2015 Certified</div>
+    <div>
+      <a href="mailto:sales@nirmalprecision.com">sales@nirmalprecision.com</a>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<div class="container">
+  <div class="nav">
+
+    <!-- LOGO -->
+    <div class="logo">
+      <a href="{{ url_for('home') }}">
+        NIRMAL <span>PRECISION</span>
+      </a>
+    </div>
+
+    <!-- NAV LINKS -->
+    <div class="nav-links">
+      <a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">Home</a>
+      <a href="{{ url_for('products_page') }}" class="{% if request.endpoint == 'products_page' %}active{% endif %}">Products</a>
+      <a href="{{ url_for('export') }}" class="{% if request.endpoint == 'export' %}active{% endif %}">Export</a>
+      <a href="{{ url_for('about') }}" class="{% if request.endpoint == 'about' %}active{% endif %}">About</a>
+      <a href="{{ url_for('contact') }}" class="{% if request.endpoint == 'contact' %}active{% endif %}">Contact</a>
+      <a href="{{ url_for('compare') }}" class="{% if request.endpoint == 'compare' %}active{% endif %}">Compare</a>
+    </div>
+
+    <!-- CART BUTTON WITH SVG -->
+    <div class="cta">
+      <a href="{{ url_for('cart') }}" style="display:flex; align-items:center; gap:6px;">
+        
+        <!-- CART SVG -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M6 6h15l-1.5 9h-13z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+          <circle cx="9" cy="21" r="1.5" fill="white"/>
+          <circle cx="18" cy="21" r="1.5" fill="white"/>
+        </svg>
+
+        Cart ({{ cart|length }})
+      </a>
+    </div>
+
+  </div>
+</div>

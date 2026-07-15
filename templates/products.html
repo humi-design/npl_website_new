@@ -1,0 +1,509 @@
+{% extends "base.html" %}
+
+{% block title %}Product Catalog | Precision Components & Fasteners{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Products Page Styles */
+.products-hero {
+    padding: 80px 0 60px;
+    background: linear-gradient(135deg, var(--bg-light) 0%, var(--white) 100%);
+    border-bottom: 1px solid var(--border);
+}
+
+.products-hero h1 {
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.products-hero p {
+    font-size: 16px;
+    color: var(--text-muted);
+    max-width: 600px;
+}
+
+/* Main Layout */
+.products-main {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 32px;
+    padding: 40px 0;
+}
+
+/* Sidebar */
+.products-sidebar {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
+
+.filter-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.filter-header h3 {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.filter-clear {
+    font-size: 13px;
+    color: var(--primary);
+    cursor: pointer;
+}
+
+.filter-clear:hover {
+    text-decoration: underline;
+}
+
+.filter-group {
+    margin-bottom: 24px;
+}
+
+.filter-group:last-child {
+    margin-bottom: 0;
+}
+
+.filter-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.filter-search {
+    position: relative;
+}
+
+.filter-search input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.filter-search input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.filter-search i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: var(--text-muted);
+}
+
+.filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--bg-light);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.filter-option:hover {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.filter-option input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary);
+}
+
+.filter-option span {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.filter-option .count {
+    margin-left: auto;
+    font-size: 11px;
+    opacity: 0.7;
+}
+
+.filter-apply {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background: var(--primary);
+    color: var(--white);
+    font-weight: 600;
+    border-radius: var(--radius);
+    transition: var(--transition);
+}
+
+.filter-apply:hover {
+    background: var(--primary-dark);
+}
+
+/* Products Grid */
+.products-content {
+    min-width: 0;
+}
+
+.products-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.products-count {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.products-count strong {
+    color: var(--text-dark);
+}
+
+.products-sort {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.products-sort select {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 13px;
+    background: var(--white);
+    cursor: pointer;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+/* Product Card Enhancement */
+.products-grid .product-card {
+    position: relative;
+}
+
+.product-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 4px 10px;
+    background: var(--success);
+    color: var(--white);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: var(--radius-sm);
+    z-index: 1;
+}
+
+.product-image {
+    position: relative;
+    height: 180px;
+    background: linear-gradient(135deg, var(--bg-light) 0%, #EEF2FF 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.product-image img {
+    max-width: 75%;
+    max-height: 75%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.08) rotate(2deg);
+}
+
+.product-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.product-actions .btn {
+    flex: 1;
+    padding: 12px 16px;
+    font-size: 13px;
+}
+
+.product-actions .btn i {
+    width: 16px;
+    height: 16px;
+}
+
+.product-compare-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    transition: var(--transition);
+    flex-shrink: 0;
+}
+
+.product-compare-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(10, 77, 156, 0.05);
+}
+
+.product-compare-btn i {
+    width: 18px;
+    height: 18px;
+}
+
+/* Empty State */
+.products-empty {
+    text-align: center;
+    padding: 80px 40px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+}
+
+.products-empty-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--bg-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+}
+
+.products-empty-icon i {
+    width: 40px;
+    height: 40px;
+    color: var(--text-muted);
+}
+
+.products-empty h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.products-empty p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .products-main {
+        grid-template-columns: 1fr;
+    }
+    
+    .products-sidebar {
+        position: static;
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .products-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ===== HERO ===== -->
+<section class="products-hero">
+    <div class="container">
+        <h1 data-aos="fade-up">Product Catalog</h1>
+        <p data-aos="fade-up" data-aos-delay="100">
+            Explore our comprehensive range of precision-engineered components. From standard fasteners to custom machined parts, we have the solution for your industrial needs.
+        </p>
+    </div>
+</section>
+
+<!-- ===== MAIN CONTENT ===== -->
+<section class="section-sm">
+    <div class="container">
+        <div class="products-main">
+            <!-- Sidebar -->
+            <aside class="products-sidebar" data-aos="fade-right">
+                <div class="filter-card">
+                    <div class="filter-header">
+                        <h3>Filters</h3>
+                        <a href="{{ url_for('products_page') }}" class="filter-clear">Clear All</a>
+                    </div>
+                    
+                    <form method="get" action="{{ url_for('products_page') }}" id="filterForm">
+                        <!-- Search -->
+                        <div class="filter-group">
+                            <div class="filter-label">Search</div>
+                            <div class="filter-search">
+                                <i data-lucide="search"></i>
+                                <input type="text" name="search" placeholder="Part # or Name" value="{{ search_text or '' }}">
+                            </div>
+                        </div>
+                        
+                        <!-- Categories -->
+                        <div class="filter-group">
+                            <div class="filter-label">Category</div>
+                            <div class="filter-options">
+                                <label class="filter-option {% if not selected_category %}active{% endif %}">
+                                    <input type="radio" name="category" value="" {% if not selected_category %}checked{% endif %}>
+                                    <span>All Categories</span>
+                                </label>
+                                {% for c in categories %}
+                                <label class="filter-option {% if selected_category == c.name %}active{% endif %}">
+                                    <input type="radio" name="category" value="{{ c.name }}" {% if selected_category == c.name %}checked{% endif %}>
+                                    <span>{{ c.name }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="filter-apply">
+                            <i data-lucide="filter" style="width: 16px; height: 16px; display: inline; vertical-align: middle;"></i>
+                            Apply Filters
+                        </button>
+                    </form>
+                </div>
+            </aside>
+            
+            <!-- Products -->
+            <div class="products-content">
+                <div class="products-header" data-aos="fade-up">
+                    <p class="products-count">
+                        Showing <strong>{{ products|length }}</strong> products
+                        {% if selected_category %}in <strong>{{ selected_category }}</strong>{% endif %}
+                        {% if search_text %}for "<strong>{{ search_text }}</strong>"{% endif %}
+                    </p>
+                </div>
+                
+                {% if products %}
+                <div class="products-grid">
+                    {% for p in products %}
+                    <div class="product-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 50 }}">
+                        <div class="product-image">
+                            {% if p.category %}
+                            <span class="product-badge">{{ p.category }}</span>
+                            {% endif %}
+                            <img src="{{ p.image or 'https://via.placeholder.com/300x200?text=Product' }}" alt="{{ p.name }}">
+                        </div>
+                        <div class="product-body">
+                            {% if p.code %}
+                            <p class="product-code">{{ p.code }}</p>
+                            {% endif %}
+                            <h3 class="product-title">{{ p.name }}</h3>
+                            <div class="product-specs">
+                                {% if p.material %}
+                                <p><span>Material:</span> {{ p.material }}</p>
+                                {% endif %}
+                                {% if p.size %}
+                                <p><span>Size:</span> {{ p.size }}</p>
+                                {% endif %}
+                                {% if p.standard %}
+                                <p><span>Standard:</span> {{ p.standard }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="product-actions">
+                                <a href="{{ url_for('add_to_cart', id=p.id) }}" class="btn btn-primary">
+                                    <i data-lucide="clipboard-plus"></i>
+                                    Add to RFQ
+                                </a>
+                                <a href="{{ url_for('compare_add', id=p.id) }}" class="product-compare-btn" title="Add to Compare">
+                                    <i data-lucide="git-compare"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="products-empty">
+                    <div class="products-empty-icon">
+                        <i data-lucide="package-x"></i>
+                    </div>
+                    <h3>No Products Found</h3>
+                    <p>Try adjusting your search or filter criteria</p>
+                    <a href="{{ url_for('products_page') }}" class="btn btn-primary">
+                        <i data-lucide="refresh-cw"></i>
+                        Clear Filters
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Filter option click handler
+    const filterOptions = document.querySelectorAll('.filter-option');
+    filterOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            const radio = this.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+                filterOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
