@@ -1,5 +1,6 @@
 import os 
 import time
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
@@ -830,6 +831,300 @@ def ensure_db_ready():
         pass
 
 # ======================
+
+# ======================
+# SITEMAP
+# ======================
+
+@app.route("/sitemap.xml")
+def sitemap():
+    """Generate XML sitemap for search engines"""
+    from flask import Response
+    
+    categories = Category.query.all()
+    products = Product.query.all()
+    
+    # Static pages
+    static_pages = [
+        {"loc": "https://nirmalprecision.com/", "priority": "1.0", "changefreq": "daily"},
+        {"loc": "https://nirmalprecision.com/about", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://nirmalprecision.com/products", "priority": "0.9", "changefreq": "daily"},
+        {"loc": "https://nirmalprecision.com/export", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://nirmalprecision.com/contact", "priority": "0.7", "changefreq": "monthly"},
+        {"loc": "https://nirmalprecision.com/privacy", "priority": "0.3", "changefreq": "yearly"},
+        {"loc": "https://nirmalprecision.com/terms", "priority": "0.3", "changefreq": "yearly"},
+    ]
+    
+    # Category pages
+    category_pages = []
+    for cat in categories:
+        category_pages.append({
+            "loc": f"https://nirmalprecision.com/products?category={cat.name.replace(' ', '+')}",
+            "priority": "0.8",
+            "changefreq": "weekly"
+        })
+    
+    # Product pages (using query parameters for now)
+    product_pages = []
+    for product in products:
+        product_pages.append({
+            "loc": f"https://nirmalprecision.com/products?search={product.code}",
+            "priority": "0.7",
+            "changefreq": "weekly"
+        })
+    
+    # Country pages
+    country_pages = [
+        {"loc": "https://nirmalprecision.com/country/usa", "priority": "0.7", "changefreq": "monthly"},
+        {"loc": "https://nirmalprecision.com/country/germany", "priority": "0.7", "changefreq": "monthly"},
+        {"loc": "https://nirmalprecision.com/country/uk", "priority": "0.7", "changefreq": "monthly"},
+        {"loc": "https://nirmalprecision.com/country/france", "priority": "0.7", "changefreq": "monthly"},
+        {"loc": "https://nirmalprecision.com/country/italy", "priority": "0.7", "changefreq": "monthly"},
+        {"loc": "https://nirmalprecision.com/country/spain", "priority": "0.7", "changefreq": "monthly"},
+        {"loc": "https://nirmalprecision.com/country/netherlands", "priority": "0.7", "changefreq": "monthly"},
+        {"loc": "https://nirmalprecision.com/country/sweden", "priority": "0.7", "changefreq": "monthly"},
+        {"loc": "https://nirmalprecision.com/country/canada", "priority": "0.7", "changefreq": "monthly"},
+        {"loc": "https://nirmalprecision.com/country/australia", "priority": "0.7", "changefreq": "monthly"},
+        {"loc": "https://nirmalprecision.com/country/uae", "priority": "0.7", "changefreq": "monthly"},
+    ]
+    
+    xml_sitemap = '''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+'''
+    
+    for page in static_pages:
+        xml_sitemap += f'''    <url>
+        <loc>{page["loc"]}</loc>
+        <priority>{page["priority"]}</priority>
+        <changefreq>{page["changefreq"]}</changefreq>
+        <lastmod>{datetime.now().strftime('%Y-%m-%d')}</lastmod>
+    </url>
+'''
+    
+    for page in category_pages:
+        xml_sitemap += f'''    <url>
+        <loc>{page["loc"]}</loc>
+        <priority>{page["priority"]}</priority>
+        <changefreq>{page["changefreq"]}</changefreq>
+        <lastmod>{datetime.now().strftime('%Y-%m-%d')}</lastmod>
+    </url>
+'''
+    
+    for page in product_pages:
+        xml_sitemap += f'''    <url>
+        <loc>{page["loc"]}</loc>
+        <priority>{page["priority"]}</priority>
+        <changefreq>{page["changefreq"]}</changefreq>
+        <lastmod>{datetime.now().strftime('%Y-%m-%d')}</lastmod>
+    </url>
+'''
+    
+    for page in country_pages:
+        xml_sitemap += f'''    <url>
+        <loc>{page["loc"]}</loc>
+        <priority>{page["priority"]}</priority>
+        <changefreq>{page["changefreq"]}</changefreq>
+        <lastmod>{datetime.now().strftime('%Y-%m-%d')}</lastmod>
+    </url>
+'''
+    
+    xml_sitemap += '</urlset>'
+    
+    return Response(xml_sitemap, mimetype='application/xml')
+
+
+# ======================
+# ROBOTS.TXT
+# ======================
+
+@app.route("/robots.txt")
+def robots():
+    """Generate robots.txt for search engines"""
+    from flask import Response
+    
+    robots_txt = '''# Robots.txt for Nirmal Precision
+# https://nirmalprecision.com
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://nirmalprecision.com/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Allow important bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+# Block admin areas
+Disallow: /admin/
+Disallow: /admin/login
+'''
+    
+    return Response(robots_txt, mimetype='text/plain')
+
+
+# ======================
+# COUNTRY PAGES
+# ======================
+
+@app.route("/country/<country_code>")
+def country_page(country_code):
+    """Generate country-specific landing pages"""
+    country_data = {
+        "usa": {
+            "name": "United States",
+            "flag": "🇺🇸",
+            "standards": ["ASTM", "ASME", "SAE", "ANSI", "ISO"],
+            "industries": ["Automotive", "Aerospace", "Medical Devices", "Electronics", "Construction"],
+            "description": "Nirmal Precision exports precision components and industrial fasteners to the United States, serving major OEMs and distributors across all 50 states."
+        },
+        "germany": {
+            "name": "Germany",
+            "flag": "🇩🇪",
+            "standards": ["DIN", "ISO", "EN", "VDMA"],
+            "industries": ["Automotive", "Industrial Machinery", "Renewable Energy", "Medical Technology"],
+            "description": "As a DIN standards specialist, we supply precision components to German automotive, machinery, and industrial manufacturers with full European compliance."
+        },
+        "uk": {
+            "name": "United Kingdom",
+            "flag": "🇬🇧",
+            "standards": ["BS", "ISO", "DIN", "EN"],
+            "industries": ["Aerospace", "Automotive", "Railway", "Defense"],
+            "description": "We supply precision fasteners and components to UK aerospace, automotive, and defense contractors meeting British Standards and EU compliance."
+        },
+        "france": {
+            "name": "France",
+            "flag": "🇫🇷",
+            "standards": ["NF", "DIN", "ISO", "EN"],
+            "industries": ["Aerospace", "Automotive", "Nuclear", "Luxury Goods Manufacturing"],
+            "description": "Our precision components serve French aerospace, automotive, and nuclear industries with NF and DIN compliant products."
+        },
+        "italy": {
+            "name": "Italy",
+            "flag": "🇮🇹",
+            "standards": ["UNI", "DIN", "ISO", "EN"],
+            "industries": ["Automotive", "Industrial Equipment", "Fashion Machinery", "Food Processing"],
+            "description": "We supply precision fasteners and components to Italian manufacturers across automotive, industrial equipment, and food processing sectors."
+        },
+        "spain": {
+            "name": "Spain",
+            "flag": "🇪🇸",
+            "standards": ["UNE", "DIN", "ISO", "EN"],
+            "industries": ["Automotive", "Renewable Energy", "Aerospace", "Railway"],
+            "description": "Our Spanish partners rely on our precision components for automotive, renewable energy, and aerospace applications."
+        },
+        "netherlands": {
+            "name": "Netherlands",
+            "flag": "🇳🇱",
+            "standards": ["NEN", "DIN", "ISO", "EN"],
+            "industries": ["Semiconductor", "Industrial Machinery", "Chemical Processing", "Agriculture"],
+            "description": "We serve Dutch high-tech industries including semiconductor manufacturing, industrial machinery, and chemical processing."
+        },
+        "sweden": {
+            "name": "Sweden",
+            "flag": "🇸🇪",
+            "standards": ["SIS", "DIN", "ISO", "EN"],
+            "industries": ["Automotive", "Heavy Industry", "Telecom", "Medical Devices"],
+            "description": "Swedish automotive and heavy industry manufacturers trust our precision components for demanding applications."
+        },
+        "canada": {
+            "name": "Canada",
+            "flag": "🇨🇦",
+            "standards": ["CSA", "ASTM", "ASME", "DIN", "ISO"],
+            "industries": ["Mining", "Oil & Gas", "Automotive", "Aerospace"],
+            "description": "We supply precision fasteners and components to Canadian mining, oil & gas, and manufacturing industries."
+        },
+        "australia": {
+            "name": "Australia",
+            "flag": "🇦🇺",
+            "standards": ["AS", "ASTM", "DIN", "ISO"],
+            "industries": ["Mining", "Agriculture", "Automotive", "Construction"],
+            "description": "Australian mining, agriculture, and manufacturing sectors rely on our precision components for critical applications."
+        },
+        "uae": {
+            "name": "United Arab Emirates",
+            "flag": "🇦🇪",
+            "standards": ["ESMA", "DIN", "ISO", "ASTM"],
+            "industries": ["Oil & Gas", "Construction", "Marine", "Renewable Energy"],
+            "description": "We serve UAE's oil & gas, construction, and marine industries with precision components meeting international standards."
+        }
+    }
+    
+    if country_code not in country_data:
+        return redirect(url_for('home'))
+    
+    data = country_data[country_code]
+    
+    return render_template(
+        'country.html',
+        country=data,
+        country_code=country_code
+    )
+
+
+# ======================
+# BLOG SECTION
+# ======================
+
+@app.route("/blog")
+def blog():
+    """Blog listing page"""
+    return render_template('blog.html')
+
+
+@app.route("/blog/<slug>")
+def blog_post(slug):
+    """Individual blog post page"""
+    return render_template('blog_post.html', slug=slug)
+
+
+# ======================
+# LANDING PAGES
+# ======================
+
+@app.route("/fastener-manufacturer-india")
+def fastener_manufacturer():
+    """Landing page for fastener manufacturer India"""
+    return render_template('landing/fastener_manufacturer.html')
+
+
+@app.route("/bolt-manufacturer-india")
+def bolt_manufacturer():
+    """Landing page for bolt manufacturer India"""
+    return render_template('landing/bolt_manufacturer.html')
+
+
+@app.route("/precision-machined-parts")
+def precision_machined():
+    """Landing page for precision machined parts"""
+    return render_template('landing/precision_machined.html')
+
+
+@app.route("/cnc-machined-parts-manufacturer")
+def cnc_machined():
+    """Landing page for CNC machined parts"""
+    return render_template('landing/cnc_machined.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True)

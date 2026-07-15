@@ -1,6 +1,133 @@
 {% extends "base.html" %}
 
 {% block title %}Nirmal Precision | Precision Engineering Components & Global Export{% endblock %}
+{% block meta_title %}Nirmal Precision - Precision Engineering Components & Industrial Fasteners Manufacturer{% endblock %}
+{% block meta_description %}Nirmal Precision is a leading manufacturer and exporter of precision turned components, CNC machined parts, industrial fasteners, and custom machined components. ISO 9001:2015 certified since 1997. Global export to 80+ countries worldwide.{% endblock %}
+{% block meta_keywords %}precision engineering, CNC machined parts, industrial fasteners, precision turned components, stainless steel fasteners, hex bolts, nuts, washers, custom fasteners, India manufacturer{% endblock %}
+{% block canonical_url %}https://nirmalprecision.com/{% endblock %}
+{% block og_type %}website{% endblock %}
+{% block og_title %}Nirmal Precision | Precision Engineering Components & Global Export{% endblock %}
+{% block og_description %}Leading manufacturer of precision turned components, CNC parts, industrial fasteners. ISO 9001:2015 certified. Serving 80+ countries worldwide.{% endblock %}
+{% block og_url %}https://nirmalprecision.com/{% endblock %}
+{% block og_image %}https://nirmalprecision.com/static/img/og-homepage.jpg{% endblock %}
+{% block twitter_title %}Nirmal Precision | Precision Engineering Components & Global Export{% endblock %}
+{% block twitter_description %}Leading manufacturer of precision turned components, CNC parts, industrial fasteners. ISO 9001:2015 certified. Serving 80+ countries worldwide.{% endblock %}
+{% block twitter_url %}https://nirmalprecision.com/{% endblock %}
+{% block twitter_image %}https://nirmalprecision.com/static/img/og-homepage.jpg{% endblock %}
+
+{% block structured_data %}
+<!-- BreadcrumbList Schema -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://nirmalprecision.com/"
+        }
+    ]
+}
+</script>
+
+<!-- FAQPage Schema -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "What products does Nirmal Precision manufacture?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Nirmal Precision manufactures precision turned components, CNC machined parts, industrial fasteners (hex bolts, nuts, washers, screws), custom fasteners, and machined components from M4 to M36 sizes in stainless steel, carbon steel, and alloy steel."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What international standards do your fasteners comply with?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Our fasteners comply with DIN standards (DIN 933, DIN 934, DIN 125, DIN 127, DIN 910, etc.), ISO standards, and ASTM standards. We also manufacture to custom specifications based on client requirements."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Which countries do you export to?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We export to 80+ countries including Germany, Netherlands, France, Sweden, Italy, United Kingdom, USA, Canada, Australia, and many more across Europe, Americas, and Asia-Pacific."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What quality certifications do you hold?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We are ISO 9001:2015 certified for Quality Management Systems. Our products are also RoHS compliant and REACH compliant, ensuring they meet international environmental and safety standards."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What is your minimum order quantity?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Our minimum order quantities vary by product type and specification. For standard fasteners, MOQ starts at 100 pieces. For custom precision components, please contact our sales team for a tailored quote based on your requirements."
+            }
+        }
+    ]
+}
+</script>
+
+<!-- Manufacturer Schema -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Manufacturer",
+    "@id": "https://nirmalprecision.com/#manufacturer",
+    "name": "Nirmal Precision Pvt. Ltd.",
+    "url": "https://nirmalprecision.com",
+    "logo": "https://nirmalprecision.com/static/img/logo.png",
+    "description": "Leading manufacturer of precision turned components, CNC machined parts, and industrial fasteners. ISO 9001:2015 certified.",
+    "foundingDate": "1997",
+    "foundingLocation": {
+        "@type": "Place",
+        "name": "Bhayandar, Mumbai, India"
+    },
+    "areaServed": {
+        "@type": "Place",
+        "name": "Worldwide"
+    },
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "A-12, Priya Industrial Estate, Behind Mira Bhayandar Sports",
+        "addressLocality": "Bhayandar",
+        "addressRegion": "Maharashtra",
+        "postalCode": "401105",
+        "addressCountry": "IN"
+    },
+    "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+91-9029531035",
+        "contactType": "sales",
+        "email": "sales@nirmalprecision.com"
+    },
+    "makes": [
+        "Precision Turned Components",
+        "CNC Machined Parts",
+        "Industrial Fasteners",
+        "Hex Bolts",
+        "Nuts",
+        "Washers",
+        "Screws",
+        "Custom Fasteners"
+    ]
+}
+</script>
+{% endblock %}
 
 {% block extra_css %}
 <style>

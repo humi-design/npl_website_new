@@ -3,19 +3,189 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{% block title %}Nirmal Precision | Precision Engineering & Global Export{% endblock %}</title>
-<meta name="description" content="Leading manufacturer and exporter of precision turned components, CNC turned parts, industrial fasteners, and custom machined components. ISO 9001:2015 certified. Global export to 80+ countries.">
-<meta name="keywords" content="precision turned components, CNC parts, industrial fasteners, custom machined components, brass components, stainless steel fasteners, global export">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+<!-- Primary Meta Tags -->
+<title>{% block title %}Nirmal Precision | Precision Engineering Components & Global Export{% endblock %}</title>
+<meta name="title" content="{% block meta_title %}Nirmal Precision | Precision Engineering Components & Global Export{% endblock %}">
+<meta name="description" content="{% block meta_description %}Leading manufacturer and exporter of precision turned components, CNC turned parts, industrial fasteners, and custom machined components. ISO 9001:2015 certified. Global export to 80+ countries.{% endblock %}">
+<meta name="keywords" content="{% block meta_keywords %}precision turned components, CNC parts, industrial fasteners, custom machined components, brass components, stainless steel fasteners, global export, DIN standards, ISO certified manufacturer{% endblock %}">
+<meta name="author" content="Nirmal Precision Pvt. Ltd.">
+<meta name="robots" content="{% block meta_robots %}index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1{% endblock %}">
+<meta name="googlebot" content="index, follow">
+<meta name="revisit-after" content="7 days">
+<meta name="language" content="English">
+<meta name="geo.region" content="IN-MH">
+<meta name="geo.placename" content="Bhayandar, Mumbai">
+<meta name="geo.position" content="19.2996;72.8504">
+<meta name="ICBM" content="19.2996, 72.8504">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="{% block canonical_url %}{{ request.url }}{% endblock %}">
+
+<!-- Hreflang Tags -->
+<link rel="alternate" hreflang="en" href="{{ request.url }}">
+<link rel="alternate" hreflang="en-US" href="{{ request.url }}">
+<link rel="alternate" hreflang="en-GB" href="{{ request.url }}">
+<link rel="alternate" hreflang="x-default" href="{{ request.url }}">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="{% block og_type %}website{% endblock %}">
+<meta property="og:url" content="{% block og_url %}{{ request.url }}{% endblock %}">
+<meta property="og:title" content="{% block og_title %}Nirmal Precision | Precision Engineering Components & Global Export{% endblock %}">
+<meta property="og:description" content="{% block og_description %}Leading manufacturer and exporter of precision turned components, CNC turned parts, industrial fasteners, and custom machined components. ISO 9001:2015 certified.{% endblock %}">
+<meta property="og:image" content="{% block og_image %}https://nirmalprecision.com/static/img/og-image.jpg{% endblock %}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Nirmal Precision - Precision Engineering Components Manufacturer">
+<meta property="og:site_name" content="Nirmal Precision">
+<meta property="og:locale" content="en_US">
+<meta property="og:see_also" content="https://www.linkedin.com/company/nirmal-precision">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@NirmalPrecision">
+<meta name="twitter:creator" content="@NirmalPrecision">
+<meta name="twitter:url" content="{% block twitter_url %}{{ request.url }}{% endblock %}">
+<meta name="twitter:title" content="{% block twitter_title %}Nirmal Precision | Precision Engineering Components & Global Export{% endblock %}">
+<meta name="twitter:description" content="{% block twitter_description %}Leading manufacturer and exporter of precision turned components, CNC turned parts, industrial fasteners, and custom machined components. ISO 9001:2015 certified.{% endblock %}">
+<meta name="twitter:image" content="{% block twitter_image %}https://nirmalprecision.com/static/img/og-image.jpg{% endblock %}">
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/static/img/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="/static/img/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/static/img/favicon-16x16.png">
+
+<!-- Theme Color -->
+<meta name="theme-color" content="#0a4d9c">
+<meta name="msapplication-TileColor" content="#0a4d9c">
+
+<!-- DNS Prefetch -->
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link rel="dns-prefetch" href="//fonts.gstatic.com">
+<link rel="dns-prefetch" href="//www.google.com">
+
+<!-- Preconnect -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://www.google.com">
+<link rel="preconnect" href="https://www.googletagmanager.com">
+
+<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- Icons -->
 <script src="https://unpkg.com/lucide@latest"></script>
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
+<!-- Styles -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/premium.min.css') }}">
 
+<!-- Structured Data - Organization -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://nirmalprecision.com/#organization",
+    "name": "Nirmal Precision Pvt. Ltd.",
+    "alternateName": "Nirmal Precision",
+    "url": "https://nirmalprecision.com",
+    "logo": "https://nirmalprecision.com/static/img/logo.png",
+    "description": "Leading manufacturer and exporter of precision turned components, CNC turned parts, industrial fasteners, and custom machined components. ISO 9001:2015 certified. Global export to 80+ countries.",
+    "foundingDate": "1997",
+    "foundingLocation": "Bhayandar, Mumbai, India",
+    "areaServed": "Worldwide",
+    "knowsAbout": ["Precision Machining", "CNC Manufacturing", "Fastener Production", "Industrial Components"],
+    "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+91-9029531035",
+        "contactType": "sales",
+        "email": "sales@nirmalprecision.com",
+        "areaServed": "Worldwide",
+        "availableLanguage": ["English", "Hindi"]
+    },
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "A-12, Priya Industrial Estate, Behind Mira Bhayandar Sports",
+        "addressLocality": "Bhayandar",
+        "addressRegion": "Maharashtra",
+        "postalCode": "401105",
+        "addressCountry": "IN"
+    },
+    "sameAs": [
+        "https://www.linkedin.com/company/nirmal-precision",
+        "https://twitter.com/NirmalPrecision"
+    ],
+    "hasCredential": [
+        {
+            "@type": "EducationalOccupationalCredential",
+            "credentialCategory": "certification",
+            "name": "ISO 9001:2015",
+            "description": "Quality Management System"
+        }
+    ]
+}
+</script>
+
+<!-- Structured Data - WebSite with SearchAction -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://nirmalprecision.com/#website",
+    "url": "https://nirmalprecision.com",
+    "name": "Nirmal Precision",
+    "description": "Leading manufacturer and exporter of precision turned components, CNC turned parts, industrial fasteners, and custom machined components.",
+    "publisher": {
+        "@id": "https://nirmalprecision.com/#organization"
+    },
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://nirmalprecision.com/products?search={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+
+<!-- Structured Data - LocalBusiness -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": "https://nirmalprecision.com/#local-business",
+    "name": "Nirmal Precision Pvt. Ltd.",
+    "image": "https://nirmalprecision.com/static/img/factory.jpg",
+    "priceRange": "$$",
+    "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        "opens": "09:00",
+        "closes": "18:00"
+    },
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "A-12, Priya Industrial Estate, Behind Mira Bhayandar Sports",
+        "addressLocality": "Bhayandar",
+        "addressRegion": "Maharashtra",
+        "postalCode": "401105",
+        "addressCountry": "IN"
+    },
+    "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 19.2996,
+        "longitude": 72.8504
+    },
+    "telephone": "+91-9029531035",
+    "email": "sales@nirmalprecision.com"
+}
+</script>
+
+{% block structured_data %}{% endblock %}
 {% block extra_css %}{% endblock %}
 </head>
 

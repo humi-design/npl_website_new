@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+
+{% block title %}Blog | Precision Engineering & Fastener Industry Insights | Nirmal Precision{% endblock %}
+{% block meta_title %}Blog - Precision Engineering & Industrial Fastener Industry Insights | Nirmal Precision{% endblock %}
+{% block meta_description %}Stay updated with precision engineering insights, fastener industry news, DIN/ISO standards guides, manufacturing process explanations, and export tips from Nirmal Precision experts.{% endblock %}
+{% block meta_keywords %}blog, precision engineering, fastener industry, DIN standards, ISO standards, manufacturing process, cold forging, heat treatment, export guide, quality control{% endblock %}
+{% block canonical_url %}https://nirmalprecision.com/blog{% endblock %}
+{% block og_type %}website{% endblock %}
+{% block og_title %}Blog | Precision Engineering & Fastener Industry Insights | Nirmal Precision{% endblock %}
+{% block og_description %}Stay updated with precision engineering insights, fastener industry news, DIN/ISO standards guides, and manufacturing process explanations.{% endblock %}
+{% block og_url %}https://nirmalprecision.com/blog{% endblock %}
+{% block og_image %}https://nirmalprecision.com/static/img/og-blog.jpg{% endblock %}
+{% block twitter_title %}Blog | Precision Engineering & Fastener Industry Insights{% endblock %}
+{% block twitter_description %}Stay updated with precision engineering insights, fastener industry news, DIN/ISO standards guides, and manufacturing process explanations.{% endblock %}
+{% block twitter_url %}https://nirmalprecision.com/blog{% endblock %}
+{% block twitter_image %}https://nirmalprecision.com/static/img/og-blog.jpg{% endblock %}
+
+{% block structured_data %}
+<!-- BreadcrumbList Schema -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://nirmalprecision.com/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blog",
+            "item": "https://nirmalprecision.com/blog"
+        }
+    ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.blog-hero {
+    padding: 120px 0 80px;
+    background: linear-gradient(135deg, var(--bg-light) 0%, var(--white) 100%);
+}
+
+.blog-hero h1 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+
+.blog-hero p {
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 600px;
+}
+
+.blog-section {
+    padding: 80px 0;
+    background: var(--white);
+}
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 32px;
+    margin-top: 48px;
+}
+
+.blog-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.blog-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary);
+}
+
+.blog-card-image {
+    height: 200px;
+    background: var(--bg-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.blog-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.blog-card-body {
+    padding: 24px;
+}
+
+.blog-card-category {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(10, 77, 156, 0.1);
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+}
+
+.blog-card-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.blog-card-title a {
+    color: var(--text-dark);
+    text-decoration: none;
+}
+
+.blog-card-title a:hover {
+    color: var(--primary);
+}
+
+.blog-card-excerpt {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+.blog-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.blog-card-meta i {
+    width: 16px;
+    height: 16px;
+}
+
+@media (max-width: 768px) {
+    .blog-hero h1 {
+        font-size: 32px;
+    }
+    
+    .blog-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="blog-hero">
+    <div class="container">
+        <span class="section-label">
+            <i data-lucide="book-open"></i>
+            Blog
+        </span>
+        <h1>Precision Engineering Insights</h1>
+        <p>
+            Stay updated with the latest industry news, standards guides, manufacturing insights, and export tips from our team of experts.
+        </p>
+    </div>
+</section>
+
+<!-- Blog Grid -->
+<section class="blog-section">
+    <div class="container">
+        <div class="blog-grid">
+            <!-- Blog Post 1 -->
+            <article class="blog-card">
+                <div class="blog-card-image">
+                    <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&q=80" alt="DIN Standards Guide for Industrial Fasteners">
+                </div>
+                <div class="blog-card-body">
+                    <span class="blog-card-category">Standards Guide</span>
+                    <h3 class="blog-card-title">
+                        <a href="{{ url_for('blog_post', slug='din-standards-guide') }}">Complete Guide to DIN Standards for Industrial Fasteners</a>
+                    </h3>
+                    <p class="blog-card-excerpt">
+                        Learn about DIN 933, DIN 934, DIN 125, and other essential German industrial fastener standards. Understand specifications, dimensions, and applications.
+                    </p>
+                    <div class="blog-card-meta">
+                        <span><i data-lucide="calendar"></i> January 15, 2026</span>
+                        <span><i data-lucide="clock"></i> 8 min read</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Blog Post 2 -->
+            <article class="blog-card">
+                <div class="blog-card-image">
+                    <img src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=600&q=80" alt="CNC Machining Manufacturing Process">
+                </div>
+                <div class="blog-card-body">
+                    <span class="blog-card-category">Manufacturing</span>
+                    <h3 class="blog-card-title">
+                        <a href="{{ url_for('blog_post', slug='cnc-machining-process') }}">CNC Machining Process for Precision Components</a>
+                    </h3>
+                    <p class="blog-card-excerpt">
+                        Discover how CNC turning and milling operations achieve tolerances down to ±0.01mm. Learn about tooling, programming, and quality control.
+                    </p>
+                    <div class="blog-card-meta">
+                        <span><i data-lucide="calendar"></i> January 10, 2026</span>
+                        <span><i data-lucide="clock"></i> 6 min read</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Blog Post 3 -->
+            <article class="blog-card">
+                <div class="blog-card-image">
+                    <img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=600&q=80" alt="Fastener Materials Guide">
+                </div>
+                <div class="blog-card-body">
+                    <span class="blog-card-category">Materials</span>
+                    <h3 class="blog-card-title">
+                        <a href="{{ url_for('blog_post', slug='fastener-materials-guide') }}">Fastener Materials: Stainless Steel, Carbon Steel & Alloy Steel</a>
+                    </h3>
+                    <p class="blog-card-excerpt">
+                        Comprehensive guide to fastener materials. Compare SS 304, SS 316, carbon steel, and alloy steel properties, corrosion resistance, and applications.
+                    </p>
+                    <div class="blog-card-meta">
+                        <span><i data-lucide="calendar"></i> January 5, 2026</span>
+                        <span><i data-lucide="clock"></i> 7 min read</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Blog Post 4 -->
+            <article class="blog-card">
+                <div class="blog-card-image">
+                    <img src="https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?w=600&q=80" alt="Cold Forging Process">
+                </div>
+                <div class="blog-card-body">
+                    <span class="blog-card-category">Manufacturing</span>
+                    <h3 class="blog-card-title">
+                        <a href="{{ url_for('blog_post', slug='cold-forging-process') }}">Cold Forging vs Hot Forging: Which Process is Right for Your Fasteners?</a>
+                    </h3>
+                    <p class="blog-card-excerpt">
+                        Compare cold forging and hot forging processes for fastener manufacturing. Understand advantages, limitations, and application suitability.
+                    </p>
+                    <div class="blog-card-meta">
+                        <span><i data-lucide="calendar"></i> December 28, 2025</span>
+                        <span><i data-lucide="clock"></i> 5 min read</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Blog Post 5 -->
+            <article class="blog-card">
+                <div class="blog-card-image">
+                    <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&q=80" alt="Export Guide for Fasteners">
+                </div>
+                <div class="blog-card-body">
+                    <span class="blog-card-category">Export Guide</span>
+                    <h3 class="blog-card-title">
+                        <a href="{{ url_for('blog_post', slug='fastener-export-guide') }}">How to Import Fasteners from India: Complete Guide for Global Buyers</a>
+                    </h3>
+                    <p class="blog-card-excerpt">
+                        Step-by-step guide for international buyers importing industrial fasteners from India. Documentation, certifications, and shipping explained.
+                    </p>
+                    <div class="blog-card-meta">
+                        <span><i data-lucide="calendar"></i> December 20, 2025</span>
+                        <span><i data-lucide="clock"></i> 10 min read</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Blog Post 6 -->
+            <article class="blog-card">
+                <div class="blog-card-image">
+                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&q=80" alt="Heat Treatment Process">
+                </div>
+                <div class="blog-card-body">
+                    <span class="blog-card-category">Quality Control</span>
+                    <h3 class="blog-card-title">
+                        <a href="{{ url_for('blog_post', slug='heat-treatment-process') }}">Heat Treatment Processes for Fasteners: Strengthening Steel Components</a>
+                    </h3>
+                    <p class="blog-card-excerpt">
+                        Learn about annealing, quenching, tempering, and case hardening processes that enhance fastener mechanical properties and performance.
+                    </p>
+                    <div class="blog-card-meta">
+                        <span><i data-lucide="calendar"></i> December 15, 2025</span>
+                        <span><i data-lucide="clock"></i> 6 min read</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="cta-bg"></div>
+    <div class="container">
+        <div class="cta-content">
+            <h2 class="cta-title">Need Expert Advice?</h2>
+            <p class="cta-text">
+                Our team of precision engineering experts is ready to help with your fastener requirements.
+            </p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('contact') }}" class="btn btn-white">
+                    <i data-lucide="mail"></i>
+                    Contact Us
+                </a>
+                <a href="{{ url_for('products_page') }}" class="btn" style="background: transparent; border: 2px solid white; color: white;">
+                    <i data-lucide="package"></i>
+                    View Products
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

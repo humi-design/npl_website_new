@@ -1,6 +1,71 @@
 {% extends "base.html" %}
 
-{% block title %}Contact Us | Get in Touch{% endblock %}
+{% block title %}Contact Us | Get in Touch | Nirmal Precision{% endblock %}
+{% block meta_title %}Contact Nirmal Precision - Request a Quote for Precision Components & Fasteners{% endblock %}
+{% block meta_description %}Contact Nirmal Precision for precision components and industrial fasteners. Get a competitive quote within 24 hours. Our export team is ready to help with your requirements. ISO 9001:2015 certified manufacturer in Mumbai, India.{% endblock %}
+{% block meta_keywords %}contact, request quote, get in touch, precision components quote, fastener quote, Nirmal Precision contact, India manufacturer{% endblock %}
+{% block canonical_url %}https://nirmalprecision.com/contact{% endblock %}
+{% block og_type %}website{% endblock %}
+{% block og_title %}Contact Nirmal Precision - Request a Quote for Precision Components & Fasteners{% endblock %}
+{% block og_description %}Contact Nirmal Precision for precision components and industrial fasteners. Get a competitive quote within 24 hours. ISO 9001:2015 certified manufacturer.{% endblock %}
+{% block og_url %}https://nirmalprecision.com/contact{% endblock %}
+{% block og_image %}https://nirmalprecision.com/static/img/og-contact.jpg{% endblock %}
+{% block twitter_title %}Contact Nirmal Precision - Request a Quote{% endblock %}
+{% block twitter_description %}Contact Nirmal Precision for precision components and industrial fasteners. Get a competitive quote within 24 hours.{% endblock %}
+{% block twitter_url %}https://nirmalprecision.com/contact{% endblock %}
+{% block twitter_image %}https://nirmalprecision.com/static/img/og-contact.jpg{% endblock %}
+
+{% block structured_data %}
+<!-- BreadcrumbList Schema -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://nirmalprecision.com/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Contact Us",
+            "item": "https://nirmalprecision.com/contact"
+        }
+    ]
+}
+</script>
+
+<!-- ContactPage Schema -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Nirmal Precision",
+    "description": "Contact Nirmal Precision for precision components and industrial fasteners. Get a competitive quote within 24 hours.",
+    "url": "https://nirmalprecision.com/contact",
+    "publisher": {
+        "@id": "https://nirmalprecision.com/#organization"
+    },
+    "mainEntity": {
+        "@type": "Organization",
+        "name": "Nirmal Precision Pvt. Ltd.",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "A-12, Priya Industrial Estate, Behind Mira Bhayandar Sports",
+            "addressLocality": "Bhayandar",
+            "addressRegion": "Maharashtra",
+            "postalCode": "401105",
+            "addressCountry": "IN"
+        },
+        "telephone": "+91-9029531035",
+        "email": "sales@nirmalprecision.com"
+    }
+}
+</script>
+{% endblock %}
 
 {% block extra_css %}
 <style>
