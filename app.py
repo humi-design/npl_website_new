@@ -1944,6 +1944,48 @@ def admin_blog_add():
     return render_template('admin_blog_form.html', post=None)
 
 
+@app.route("/admin/blog/edit/<int:id>", methods=["GET", "POST"])
+def admin_blog_edit(id):
+    """Edit existing blog post"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    post = BlogPost.query.get_or_404(id)
+    
+    if request.method == "POST":
+        post.title = request.form.get('title')
+        post.excerpt = request.form.get('excerpt')
+        post.content = request.form.get('content')
+        post.category = request.form.get('category')
+        post.tags = request.form.get('tags')
+        post.author = request.form.get('author')
+        post.status = request.form.get('status', 'draft')
+        post.published_at = datetime.utcnow() if request.form.get('status') == 'published' and not post.published_at else post.published_at
+        post.meta_title = request.form.get('meta_title')
+        post.meta_description = request.form.get('meta_description')
+        
+        db.session.commit()
+        
+        flash('Blog post updated successfully!')
+        return redirect(url_for('admin_blog'))
+    
+    return render_template('admin_blog_form.html', post=post)
+
+
+@app.route("/admin/blog/delete/<int:id>", methods=["POST"])
+def admin_blog_delete(id):
+    """Delete a blog post"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    post = BlogPost.query.get_or_404(id)
+    db.session.delete(post)
+    db.session.commit()
+    
+    flash('Blog post deleted successfully!')
+    return redirect(url_for('admin_blog'))
+
+
 # ======================
 # DYNAMIC SITEMAP UPDATE
 # ======================
