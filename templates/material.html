@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block title %}{{ material.name }} Fasteners & Components | Nirmal Precision{% endblock %}
+{% block meta_title %}{{ material.name }} Fasteners | Precision Components | Nirmal Precision{% endblock %}
+{% block meta_description %}{{ material.meta_description or ('Browse our ' + material.name + ' fasteners and precision components. ' + material.description[:200] if material.description else 'High-quality ' + material.name + ' components. ISO 9001:2015 certified manufacturer.') }}{% endblock %}
+{% block canonical_url %}https://nirmalprecision.com/material/{{ material.slug }}{% endblock %}
+{% block og_type %}website{% endblock %}
+{% block og_title %}{{ material.name }} Components | Nirmal Precision{% endblock %}
+{% block og_description %}{{ material.meta_description or ('Browse ' + material.name + ' precision fasteners and components. ISO 9001:2015 certified.') }}{% endblock %}
+{% block og_url %}https://nirmalprecision.com/material/{{ material.slug }}{% endblock %}
+{% block og_image %}{{ material.image or 'https://nirmalprecision.com/static/img/og-material.jpg' }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://nirmalprecision.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Products", "item": "https://nirmalprecision.com/products"},
+        {"@type": "ListItem", "position": 3, "name": "{{ material.name }}", "item": "https://nirmalprecision.com/material/{{ material.slug }}"}
+    ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.material-page { padding-top: 80px; }
+.material-hero { padding: 80px 0; background: linear-gradient(135deg, var(--bg-light) 0%, var(--white) 100%); }
+.material-hero h1 { font-size: 42px; font-weight: 800; margin-bottom: 16px; }
+.material-hero p { font-size: 18px; color: var(--text-muted); max-width: 700px; line-height: 1.8; }
+.properties-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-top: 48px; }
+.property-card { background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; }
+.property-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--primary); }
+.property-card p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+.content-section { padding: 60px 0; }
+.content-section.alt { background: var(--bg-light); }
+.products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 32px; }
+@media (max-width: 992px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px) { .products-grid { grid-template-columns: repeat(2, 1fr); } .material-hero h1 { font-size: 32px; } }
+@media (max-width: 576px) { .products-grid { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="material-page">
+    <!-- Breadcrumb -->
+    <div class="container" style="padding-top: 20px;">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="{{ url_for('home') }}">Home</a>
+            <span>/</span>
+            <a href="{{ url_for('products_page') }}">Products</a>
+            <span>/</span>
+            <span class="current">{{ material.name }}</span>
+        </nav>
+    </div>
+
+    <!-- Hero -->
+    <section class="material-hero">
+        <div class="container">
+            <span class="section-label">
+                <i data-lucide="layers"></i>
+                Material
+            </span>
+            <h1>{{ material.name }} Fasteners & Components</h1>
+            {% if material.description %}
+            <p>{{ material.description }}</p>
+            {% else %}
+            <p>High-quality {{ material.name }} fasteners and precision components manufactured to international standards. ISO 9001:2015 certified with global export capabilities.</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Properties -->
+    <section class="content-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">
+                    <i data-lucide="info"></i>
+                    Material Properties
+                </span>
+                <h2 class="section-title">{{ material.name }} Properties & Characteristics</h2>
+            </div>
+            
+            {% if properties %}
+            <div class="properties-grid">
+                {% for prop in properties %}
+                <div class="property-card">
+                    <h4><i data-lucide="check-circle" style="width: 18px; height: 18px; margin-right: 8px;"></i>Property</h4>
+                    <p>{{ prop }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="properties-grid">
+                <div class="property-card">
+                    <h4>High Strength</h4>
+                    <p>Excellent mechanical properties suitable for demanding applications.</p>
+                </div>
+                <div class="property-card">
+                    <h4>Corrosion Resistance</h4>
+                    <p>Superior resistance to corrosion and oxidation in various environments.</p>
+                </div>
+                <div class="property-card">
+                    <h4>Precision Manufacturing</h4>
+                    <p>Tight tolerances and excellent surface finish capabilities.</p>
+                </div>
+                <div class="property-card">
+                    <h4>Global Compliance</h4>
+                    <p>Meets international standards for industrial applications.</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Advantages -->
+    {% if advantages %}
+    <section class="content-section alt">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">
+                    <i data-lucide="award"></i>
+                    Advantages
+                </span>
+                <h2 class="section-title">Why Choose {{ material.name }}?</h2>
+            </div>
+            
+            <ul style="list-style: none; padding: 0; max-width: 800px;">
+                {% for adv in advantages %}
+                <li style="display: flex; align-items: flex-start; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--border);">
+                    <span style="width: 24px; height: 24px; background: var(--success); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="check" style="width: 14px; height: 14px;"></i></span>
+                    <span style="font-size: 16px;">{{ adv }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Applications -->
+    {% if applications %}
+    <section class="content-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">
+                    <i data-lucide="settings"></i>
+                    Applications
+                </span>
+                <h2 class="section-title">{{ material.name }} Applications</h2>
+            </div>
+            
+            <div style="display: flex; flex-wrap: wrap; gap: 12px; max-width: 800px;">
+                {% for app in applications %}
+                <span style="background: rgba(10, 77, 156, 0.1); color: var(--primary); padding: 10px 20px; border-radius: var(--radius); font-size: 14px; font-weight: 500;">{{ app }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Products -->
+    {% if products %}
+    <section class="content-section alt">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">
+                    <i data-lucide="package"></i>
+                    Products
+                </span>
+                <h2 class="section-title">{{ material.name }} Products We Manufacture</h2>
+                <p class="section-subtitle">Browse our range of precision components in {{ material.name }}.</p>
+            </div>
+            
+            <div class="products-grid">
+                {% for product in products[:8] %}
+                <a href="{{ url_for('product_page', slug=product.slug) }}" style="background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: var(--transition); text-decoration: none; display: block;" onmouseover="this.style.borderColor='var(--primary)'; this.style.boxShadow='var(--shadow-lg)';" onmouseout="this.style.borderColor='var(--border)'; this.style.boxShadow='none';">
+                    <div style="height: 160px; background: var(--bg-light); display: flex; align-items: center; justify-content: center;">
+                        <img src="{{ product.image or 'https://via.placeholder.com/300x200?text=' + product.name }}" alt="{{ product.name }}" loading="lazy" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+                    </div>
+                    <div style="padding: 16px;">
+                        <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text-dark);">{{ product.name }}</h4>
+                        <p style="font-size: 12px; color: var(--text-muted);">{{ product.category or '' }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            
+            {% if products|length > 8 %}
+            <div style="text-align: center; margin-top: 32px;">
+                <a href="{{ url_for('search', material=material.name) }}" class="btn btn-outline">View All {{ material.name }} Products</a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-bg"></div>
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Need {{ material.name }} Fasteners?</h2>
+                <p class="cta-text">
+                    Contact us for custom specifications and requirements.
+                </p>
+                <div class="cta-buttons">
+                    <a href="{{ url_for('contact') }}" class="btn btn-white">
+                        <i data-lucide="mail"></i>
+                        Request Quote
+                    </a>
+                    <a href="{{ url_for('products_page') }}" class="btn" style="background: transparent; border: 2px solid white; color: white;">
+                        <i data-lucide="package"></i>
+                        View All Products
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,509 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.meta_title or (product.din_standard + ' ' + product.name + ' | Nirmal Precision') if product.din_standard else product.name + ' | Nirmal Precision' }}{% endblock %}
+{% block meta_title %}{{ product.meta_title or (product.din_standard + ' ' + product.name + ' | Nirmal Precision') if product.din_standard else product.name + ' | Nirmal Precision' }}{% endblock %}
+{% block meta_description %}{{ product.meta_description or (product.name + ' - ' + product.short_description + '. ' + product.material + ' material. Complies with ' + product.din_standard + '. ISO 9001:2015 certified. Global export available.') if product.short_description else (product.name + ' precision component. ' + product.material + ' material. ISO 9001:2015 certified.') }}{% endblock %}
+{% block meta_keywords %}{{ product.keywords or (product.name + ', ' + product.din_standard + ', ' + product.category + ', ' + product.material + ', precision fastener, industrial') }}{% endblock %}
+{% block canonical_url %}https://nirmalprecision.com/products/{{ product.slug }}{% endblock %}
+{% block og_type %}product{% endblock %}
+{% block og_title %}{{ product.og_title or (product.din_standard + ' ' + product.name) if product.din_standard else product.name }}{% endblock %}
+{% block og_description %}{{ product.og_description or (product.short_description + '. ' + product.material + ' material. ' + product.din_standard + ' compliant.') if product.short_description else (product.name + ' by Nirmal Precision. ' + product.material + ' material.') }}{% endblock %}
+{% block og_url %}https://nirmalprecision.com/products/{{ product.slug }}{% endblock %}
+{% block og_image %}{{ product.image or 'https://nirmalprecision.com/static/img/og-product.jpg' }}{% endblock %}
+{% block twitter_title %}{{ product.twitter_title or (product.din_standard + ' ' + product.name) if product.din_standard else product.name }}{% endblock %}
+{% block twitter_description %}{{ product.twitter_description or (product.short_description + '. ' + product.material + ' material. ISO 9001:2015 certified.') if product.short_description else (product.name + ' by Nirmal Precision.') }}{% endblock %}
+{% block twitter_url %}https://nirmalprecision.com/products/{{ product.slug }}{% endblock %}
+{% block twitter_image %}{{ product.image or 'https://nirmalprecision.com/static/img/og-product.jpg' }}{% endblock %}
+
+{% block structured_data %}
+<!-- BreadcrumbList Schema -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://nirmalprecision.com/"},
+        {% if product.category %}
+        {"@type": "ListItem", "position": 2, "name": "{{ product.category }}", "item": "https://nirmalprecision.com/category/{{ product.category|lower|replace(' ', '-') }}"},
+        {% endif %}
+        {"@type": "ListItem", "position": 3, "name": "{{ product.name }}", "item": "https://nirmalprecision.com/products/{{ product.slug }}"}
+    ]
+}
+</script>
+
+<!-- Product Schema -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "{{ product.name }}",
+    "description": "{{ product.short_description or product.name + ' precision component' }}",
+    "sku": "{{ product.code or product.id }}",
+    "mpn": "{{ product.code or product.id }}",
+    "image": "{{ product.image or 'https://nirmalprecision.com/static/img/product-default.jpg' }}",
+    "url": "https://nirmalprecision.com/products/{{ product.slug }}",
+    "brand": {
+        "@type": "Brand",
+        "name": "Nirmal Precision"
+    },
+    "manufacturer": {
+        "@type": "Organization",
+        "name": "Nirmal Precision Pvt. Ltd.",
+        "url": "https://nirmalprecision.com"
+    },
+    {% if product.din_standard %}
+    "hasProductSpecification": {
+        "@type": "PropertyValue",
+        "name": "DIN Standard",
+        "value": "{{ product.din_standard }}"
+    },
+    {% endif %}
+    {% if product.iso_standard %}
+    "hasProductSpecification": {
+        "@type": "PropertyValue",
+        "name": "ISO Standard",
+        "value": "{{ product.iso_standard }}"
+    },
+    {% endif %}
+    {% if product.material %}
+    "hasProductSpecification": {
+        "@type": "PropertyValue",
+        "name": "Material",
+        "value": "{{ product.material }}"
+    },
+    {% endif %}
+    {% if product.tolerance %}
+    "hasProductSpecification": {
+        "@type": "PropertyValue",
+        "name": "Tolerance",
+        "value": "{{ product.tolerance }}"
+    },
+    {% endif %}
+    "category": "{{ product.category or 'Industrial Components' }}",
+    "offers": {
+        "@type": "Offer",
+        "url": "https://nirmalprecision.com/products/{{ product.slug }}",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+            "@type": "Organization",
+            "name": "Nirmal Precision"
+        }
+    }
+}
+</script>
+
+<!-- FAQPage Schema -->
+{% if faqs %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {% for faq in faqs %}
+        {
+            "@type": "Question",
+            "name": "{{ faq.question }}",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "{{ faq.answer }}"
+            }
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
+</script>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.product-page { padding-top: 80px; }
+.product-hero { padding: 60px 0; background: var(--bg-light); }
+.product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+.product-gallery { position: sticky; top: 100px; }
+.product-main-image { background: white; border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 16px; }
+.product-main-image img { width: 100%; height: auto; display: block; }
+.product-thumbnails { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.product-thumb { background: white; border-radius: var(--radius); overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: var(--transition); }
+.product-thumb:hover, .product-thumb.active { border-color: var(--primary); }
+.product-thumb img { width: 100%; height: 80px; object-fit: cover; }
+.product-info h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; }
+.product-standard { display: inline-block; background: var(--primary); color: white; padding: 4px 12px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; margin-bottom: 16px; }
+.product-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; color: var(--text-muted); font-size: 14px; }
+.product-meta span { display: flex; align-items: center; gap: 6px; }
+.product-price { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 20px; }
+.product-actions { display: flex; gap: 12px; margin-bottom: 24px; }
+.product-actions .btn { flex: 1; }
+.product-specs { background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; }
+.product-specs h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+.spec-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.spec-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.spec-item:last-child { border-bottom: none; }
+.spec-label { color: var(--text-muted); font-size: 14px; }
+.spec-value { font-weight: 600; font-size: 14px; }
+.product-tabs { margin-top: 40px; }
+.tabs-nav { display: flex; gap: 8px; border-bottom: 2px solid var(--border); margin-bottom: 24px; }
+.tab-btn { padding: 12px 24px; background: none; border: none; font-size: 15px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: var(--transition); }
+.tab-btn:hover, .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.content-section { padding: 60px 0; }
+.content-section:nth-child(even) { background: var(--bg-light); }
+.section-label { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(10, 77, 156, 0.1); color: var(--primary); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-radius: var(--radius-sm); margin-bottom: 16px; }
+.section-title { font-size: 28px; font-weight: 800; margin-bottom: 16px; }
+.section-subtitle { font-size: 16px; color: var(--text-muted); max-width: 600px; margin-bottom: 32px; }
+.feature-list { list-style: none; padding: 0; }
+.feature-list li { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.feature-list li:last-child { border-bottom: none; }
+.feature-list .check { width: 24px; height: 24px; background: var(--success); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.specs-table { width: 100%; border-collapse: collapse; background: white; border-radius: var(--radius-lg); overflow: hidden; }
+.specs-table th, .specs-table td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border); }
+.specs-table th { background: var(--bg-light); font-weight: 600; font-size: 14px; }
+.specs-table td { font-size: 14px; }
+.related-products { padding: 60px 0; background: white; }
+.related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 32px; }
+.related-card { background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: var(--transition); }
+.related-card:hover { border-color: var(--primary); box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+.related-card-image { height: 160px; background: var(--bg-light); display: flex; align-items: center; justify-content: center; }
+.related-card-image img { max-width: 80%; max-height: 80%; object-fit: contain; }
+.related-card-body { padding: 16px; }
+.related-card-body h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.related-card-body p { font-size: 12px; color: var(--text-muted); }
+.faq-item { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+.faq-item h4 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text-dark); }
+.faq-item p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+@media (max-width: 992px) { .product-grid { grid-template-columns: 1fr; } .related-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 576px) { .related-grid { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Product Page -->
+<div class="product-page">
+    <!-- Breadcrumb -->
+    <div class="container" style="padding-top: 20px;">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="{{ url_for('home') }}">Home</a>
+            {% if product.category %}
+            <span>/</span>
+            <a href="{{ url_for('category_page', slug=product.category|lower|replace(' ', '-')) }}">{{ product.category }}</a>
+            {% endif %}
+            <span>/</span>
+            <span class="current">{{ product.name }}</span>
+        </nav>
+    </div>
+
+    <!-- Product Hero -->
+    <section class="product-hero">
+        <div class="container">
+            <div class="product-grid">
+                <!-- Gallery -->
+                <div class="product-gallery">
+                    <div class="product-main-image">
+                        <img src="{{ product.image or 'https://via.placeholder.com/600x600?text=' + product.name }}" alt="{{ product.name }}" loading="eager" width="600" height="600">
+                    </div>
+                </div>
+                
+                <!-- Info -->
+                <div class="product-info">
+                    {% if product.din_standard or product.iso_standard or product.astm_standard %}
+                    <span class="product-standard">
+                        {{ product.din_standard or product.iso_standard or product.astm_standard }}
+                    </span>
+                    {% endif %}
+                    
+                    <h1>{{ product.name }}</h1>
+                    
+                    <div class="product-meta">
+                        {% if product.category %}
+                        <span><i data-lucide="folder"></i> {{ product.category }}</span>
+                        {% endif %}
+                        {% if product.material %}
+                        <span><i data-lucide="layers"></i> {{ product.material }}</span>
+                        {% endif %}
+                        {% if product.code %}
+                        <span><i data-lucide="hash"></i> {{ product.code }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    {% if product.short_description %}
+                    <p style="color: var(--text-muted); margin-bottom: 20px; line-height: 1.7;">
+                        {{ product.short_description }}
+                    </p>
+                    {% endif %}
+                    
+                    <div class="product-actions">
+                        <a href="{{ url_for('add_to_cart', id=product.id) }}" class="btn btn-primary">
+                            <i data-lucide="clipboard-plus"></i>
+                            Add to RFQ
+                        </a>
+                        <a href="{{ url_for('contact') }}" class="btn btn-outline">
+                            <i data-lucide="message-square"></i>
+                            Request Quote
+                        </a>
+                    </div>
+                    
+                    <!-- Quick Specs -->
+                    <div class="product-specs">
+                        <h3>Quick Specifications</h3>
+                        <div class="spec-grid">
+                            {% if product.din_standard %}
+                            <div class="spec-item">
+                                <span class="spec-label">DIN Standard</span>
+                                <span class="spec-value">{{ product.din_standard }}</span>
+                            </div>
+                            {% endif %}
+                            {% if product.iso_standard %}
+                            <div class="spec-item">
+                                <span class="spec-label">ISO Standard</span>
+                                <span class="spec-value">{{ product.iso_standard }}</span>
+                            </div>
+                            {% endif %}
+                            {% if product.material %}
+                            <div class="spec-item">
+                                <span class="spec-label">Material</span>
+                                <span class="spec-value">{{ product.material }}</span>
+                            </div>
+                            {% endif %}
+                            {% if product.tolerance %}
+                            <div class="spec-item">
+                                <span class="spec-label">Tolerance</span>
+                                <span class="spec-value">{{ product.tolerance }}</span>
+                            </div>
+                            {% endif %}
+                            {% if product.size %}
+                            <div class="spec-item">
+                                <span class="spec-label">Size Range</span>
+                                <span class="spec-value">{{ product.size }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Content Tabs -->
+    <section class="section">
+        <div class="container">
+            <div class="product-tabs">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-tab="overview">Overview</button>
+                    <button class="tab-btn" data-tab="specifications">Specifications</button>
+                    <button class="tab-btn" data-tab="applications">Applications</button>
+                    {% if faqs %}
+                    <button class="tab-btn" data-tab="faq">FAQ</button>
+                    {% endif %}
+                </div>
+                
+                <!-- Overview Tab -->
+                <div class="tab-content active" id="overview">
+                    <div class="section-label">
+                        <i data-lucide="info"></i>
+                        Product Overview
+                    </div>
+                    <h2 class="section-title">About {{ product.name }}</h2>
+                    <p class="section-subtitle" style="margin-bottom: 32px;">
+                        {{ content.intro }}
+                    </p>
+                    
+                    <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 20px;">Key Features</h3>
+                    <ul class="feature-list">
+                        {% for feature in content.features %}
+                        <li>
+                            <span class="check"><i data-lucide="check" style="width: 14px; height: 14px;"></i></span>
+                            {{ feature }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <!-- Specifications Tab -->
+                <div class="tab-content" id="specifications">
+                    <div class="section-label">
+                        <i data-lucide="ruler"></i>
+                        Technical Specifications
+                    </div>
+                    <h2 class="section-title">Product Specifications</h2>
+                    
+                    <table class="specs-table">
+                        <thead>
+                            <tr>
+                                <th>Specification</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if product.din_standard %}
+                            <tr><td>DIN Standard</td><td>{{ product.din_standard }}</td></tr>
+                            {% endif %}
+                            {% if product.iso_standard %}
+                            <tr><td>ISO Standard</td><td>{{ product.iso_standard }}</td></tr>
+                            {% endif %}
+                            {% if product.astm_standard %}
+                            <tr><td>ASTM Standard</td><td>{{ product.astm_standard }}</td></tr>
+                            {% endif %}
+                            {% if product.material %}
+                            <tr><td>Material</td><td>{{ product.material }}</td></tr>
+                            {% endif %}
+                            {% if product.surface_finish %}
+                            <tr><td>Surface Finish</td><td>{{ product.surface_finish }}</td></tr>
+                            {% endif %}
+                            {% if product.size %}
+                            <tr><td>Size Range</td><td>{{ product.size }}</td></tr>
+                            {% endif %}
+                            {% if product.thread_types %}
+                            <tr><td>Thread Types</td><td>{{ product.thread_types }}</td></tr>
+                            {% endif %}
+                            {% if product.tolerance %}
+                            <tr><td>Tolerance</td><td>{{ product.tolerance }}</td></tr>
+                            {% endif %}
+                            {% if product.manufacturing_process %}
+                            <tr><td>Manufacturing Process</td><td>{{ product.manufacturing_process }}</td></tr>
+                            {% endif %}
+                            {% if product.quality_standards %}
+                            <tr><td>Quality Standards</td><td>{{ product.quality_standards }}</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    
+                    {% if product.technical_specifications %}
+                    <div style="margin-top: 32px;">
+                        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Additional Technical Details</h3>
+                        <p style="color: var(--text-muted); line-height: 1.8;">{{ product.technical_specifications }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Applications Tab -->
+                <div class="tab-content" id="applications">
+                    <div class="section-label">
+                        <i data-lucide="settings"></i>
+                        Applications & Industries
+                    </div>
+                    <h2 class="section-title">Where {{ product.name }} is Used</h2>
+                    
+                    {% if content.applications %}
+                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Applications</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px;">
+                        {% for app in content.applications %}
+                        <span style="background: var(--bg-light); padding: 8px 16px; border-radius: var(--radius); font-size: 14px;">{{ app }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    {% if content.industries %}
+                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Industries Served</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+                        {% for industry in content.industries %}
+                        <a href="{{ url_for('industry_page', slug=industry|lower|replace(' ', '-')) }}" style="background: rgba(10, 77, 156, 0.1); color: var(--primary); padding: 8px 16px; border-radius: var(--radius); font-size: 14px; text-decoration: none;">{{ industry }}</a>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- FAQ Tab -->
+                {% if faqs %}
+                <div class="tab-content" id="faq">
+                    <div class="section-label">
+                        <i data-lucide="help-circle"></i>
+                        Frequently Asked Questions
+                    </div>
+                    <h2 class="section-title">Common Questions About {{ product.name }}</h2>
+                    
+                    {% for faq in faqs %}
+                    <div class="faq-item">
+                        <h4>{{ faq.question }}</h4>
+                        <p>{{ faq.answer }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Products -->
+    {% if related_products %}
+    <section class="related-products">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">
+                    <i data-lucide="package"></i>
+                    Related Products
+                </span>
+                <h2 class="section-title">You May Also Need</h2>
+            </div>
+            <div class="related-grid">
+                {% for rp in related_products %}
+                <a href="{{ url_for('product_page', slug=rp.slug) }}" class="related-card">
+                    <div class="related-card-image">
+                        <img src="{{ rp.image or 'https://via.placeholder.com/300x200?text=' + rp.name }}" alt="{{ rp.name }}" loading="lazy">
+                    </div>
+                    <div class="related-card-body">
+                        {% if rp.din_standard %}
+                        <span style="font-size: 11px; color: var(--primary); font-weight: 600;">{{ rp.din_standard }}</span>
+                        {% endif %}
+                        <h4>{{ rp.name }}</h4>
+                        <p>{{ rp.material or rp.category or '' }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-bg"></div>
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Source {{ product.name }}?</h2>
+                <p class="cta-text">
+                    Get a competitive quote within 24 hours. Our export team is ready to discuss your requirements.
+                </p>
+                <div class="cta-buttons">
+                    <a href="{{ url_for('contact') }}" class="btn btn-white">
+                        <i data-lucide="mail"></i>
+                        Request Quote
+                    </a>
+                    <a href="https://wa.me/918424849942" target="_blank" class="btn" style="background: #25D366; border-color: #25D366;">
+                        <i data-lucide="message-circle"></i>
+                        WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab functionality
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-tab');
+            
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            this.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+    
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+});
+</script>
+{% endblock %}
