@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+
+{% block title %}Compare Products | Technical Comparison{% endblock %}
+
+{% block extra_css %}
+<style>
+.compare-page {
+    padding: 80px 0;
+}
+
+.compare-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.compare-header h1 {
+    font-size: 36px;
+    font-weight: 800;
+}
+
+.compare-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.compare-table-wrapper {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.compare-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.compare-table th,
+.compare-table td {
+    padding: 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+}
+
+.compare-table thead th {
+    background: var(--bg-light);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+}
+
+.compare-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.compare-table tbody tr:hover td {
+    background: var(--bg-light);
+}
+
+.compare-product {
+    text-align: center;
+    position: relative;
+}
+
+.compare-product-image {
+    width: 120px;
+    height: 120px;
+    background: var(--bg-light);
+    border-radius: var(--radius);
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.compare-product-image img {
+    max-width: 70%;
+    max-height: 70%;
+    object-fit: contain;
+}
+
+.compare-product h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.compare-product p {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.compare-remove {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 28px;
+    height: 28px;
+    background: #FEF2F2;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--error);
+    transition: var(--transition);
+}
+
+.compare-remove:hover {
+    background: var(--error);
+    color: var(--white);
+}
+
+.compare-spec-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    min-width: 140px;
+}
+
+.compare-spec-value {
+    font-size: 14px;
+}
+
+.compare-empty {
+    text-align: center;
+    padding: 100px 40px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+}
+
+.compare-empty-icon {
+    width: 100px;
+    height: 100px;
+    background: var(--bg-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+}
+
+.compare-empty h3 {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.compare-empty p {
+    color: var(--text-muted);
+    margin-bottom: 24px;
+}
+
+.compare-add-slot {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    transition: var(--transition);
+}
+
+.compare-add-slot:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.compare-add-slot i {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 8px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="compare-page">
+    <div class="container">
+        <div class="compare-header" data-aos="fade-up">
+            <div>
+                <h1>Product Comparison</h1>
+                <p style="color: var(--text-muted); margin-top: 8px;">
+                    Compare up to 4 products side-by-side
+                </p>
+            </div>
+            <div class="compare-actions">
+                <a href="{{ url_for('products_page') }}" class="btn btn-primary">
+                    <i data-lucide="plus"></i>
+                    Add Products
+                </a>
+                <a href="{{ url_for('clear_compare') }}" class="btn btn-ghost">
+                    <i data-lucide="trash-2"></i>
+                    Clear All
+                </a>
+            </div>
+        </div>
+
+        {% if compare|length == 0 %}
+        <div class="compare-empty" data-aos="fade-up">
+            <div class="compare-empty-icon">
+                <i data-lucide="git-compare"></i>
+            </div>
+            <h3>No Products to Compare</h3>
+            <p>Add products to compare their specifications side-by-side</p>
+            <a href="{{ url_for('products_page') }}" class="btn btn-primary">
+                <i data-lucide="package"></i>
+                Browse Products
+            </a>
+        </div>
+        {% else %}
+        <div class="compare-table-wrapper" data-aos="fade-up">
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        {% for p in compare %}
+                        <th>
+                            <div class="compare-product">
+                                <a href="{{ url_for('remove_compare', id=p.id) }}" class="compare-remove">
+                                    <i data-lucide="x" style="width: 14px; height: 14px;"></i>
+                                </a>
+                                <div class="compare-product-image">
+                                    <img src="{{ p.image or '/static/img/products/1.webp' }}" alt="{{ p.name }}">
+                                </div>
+                                <h3>{{ p.name }}</h3>
+                                {% if p.code %}
+                                <p>{{ p.code }}</p>
+                                {% endif %}
+                            </div>
+                        </th>
+                        {% endfor %}
+                        {% if compare|length < 4 %}
+                        {% for i in range(4 - compare|length) %}
+                        <th>
+                            <a href="{{ url_for('products_page') }}" class="compare-add-slot">
+                                <i data-lucide="plus-circle"></i>
+                                <p>Add Product</p>
+                            </a>
+                        </th>
+                        {% endfor %}
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for spec in spec_keys %}
+                    <tr>
+                        <td class="compare-spec-label">{{ spec }}</td>
+                        {% for p in compare %}
+                        <td class="compare-spec-value">{{ p.specs.get(spec, '—') }}</td>
+                        {% endfor %}
+                        {% if compare|length < 4 %}
+                        {% for i in range(4 - compare|length) %}
+                        <td></td>
+                        {% endfor %}
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td class="compare-spec-label">Action</td>
+                        {% for p in compare %}
+                        <td>
+                            <a href="{{ url_for('add_to_cart', id=p.id) }}" class="btn btn-primary" style="padding: 10px 16px; font-size: 13px;">
+                                <i data-lucide="clipboard-plus" style="width: 14px; height: 14px;"></i>
+                                Add to RFQ
+                            </a>
+                        </td>
+                        {% endfor %}
+                        {% if compare|length < 4 %}
+                        {% for i in range(4 - compare|length) %}
+                        <td></td>
+                        {% endfor %}
+                        {% endif %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
