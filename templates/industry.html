@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}{{ industry.name }} Fasteners & Components | Nirmal Precision{% endblock %}
+{% block meta_title %}{{ industry.meta_title or (industry.name + ' Fasteners | Precision Components | Nirmal Precision') }}{% endblock %}
+{% block meta_description %}{{ industry.meta_description or ('Precision fasteners and components for ' + industry.name.lower() + '. ' + industry.description[:200] if industry.description else 'ISO 9001:2015 certified manufacturer. Global export to 80+ countries.') }}{% endblock %}
+{% block canonical_url %}https://nirmalprecision.com/industry/{{ industry.slug }}{% endblock %}
+{% block og_type %}website{% endblock %}
+{% block og_title %}{{ industry.name }} Components | Nirmal Precision{% endblock %}
+{% block og_description %}{{ industry.meta_description or ('Precision fasteners for ' + industry.name + '.') }}{% endblock %}
+{% block og_url %}https://nirmalprecision.com/industry/{{ industry.slug }}{% endblock %}
+{% block og_image %}{{ industry.image or 'https://nirmalprecision.com/static/img/og-industry.jpg' }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://nirmalprecision.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Products", "item": "https://nirmalprecision.com/products"},
+        {"@type": "ListItem", "position": 3, "name": "{{ industry.name }}", "item": "https://nirmalprecision.com/industry/{{ industry.slug }}"}
+    ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.industry-page { padding-top: 80px; }
+.industry-hero { padding: 80px 0; background: linear-gradient(135deg, var(--bg-light) 0%, var(--white) 100%); }
+.industry-hero h1 { font-size: 42px; font-weight: 800; margin-bottom: 16px; }
+.industry-hero p { font-size: 18px; color: var(--text-muted); max-width: 700px; line-height: 1.8; }
+.applications-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-top: 32px; }
+.application-card { background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; transition: var(--transition); }
+.application-card:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+.application-card i { width: 40px; height: 40px; color: var(--primary); margin-bottom: 12px; }
+.application-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.application-card p { font-size: 14px; color: var(--text-muted); }
+.content-section { padding: 60px 0; }
+.content-section.alt { background: var(--bg-light); }
+.products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 32px; }
+.standards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-top: 32px; }
+.standard-badge { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; font-weight: 700; color: var(--primary); }
+@media (max-width: 992px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px) { .products-grid { grid-template-columns: repeat(2, 1fr); } .industry-hero h1 { font-size: 32px; } }
+@media (max-width: 576px) { .products-grid { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="industry-page">
+    <!-- Breadcrumb -->
+    <div class="container" style="padding-top: 20px;">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="{{ url_for('home') }}">Home</a>
+            <span>/</span>
+            <a href="{{ url_for('products_page') }}">Products</a>
+            <span>/</span>
+            <span class="current">{{ industry.name }}</span>
+        </nav>
+    </div>
+
+    <!-- Hero -->
+    <section class="industry-hero">
+        <div class="container">
+            <span class="section-label">
+                <i data-lucide="building-2"></i>
+                Industry
+            </span>
+            <h1>{{ industry.name }} Fasteners & Components</h1>
+            {% if industry.description %}
+            <p>{{ industry.description }}</p>
+            {% else %}
+            <p>Precision-engineered fasteners and components for {{ industry.name.lower() }} applications. ISO 9001:2015 certified manufacturer with decades of experience serving industrial sectors worldwide.</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Applications -->
+    {% if applications %}
+    <section class="content-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">
+                    <i data-lucide="settings"></i>
+                    Applications
+                </span>
+                <h2 class="section-title">{{ industry.name }} Applications</h2>
+                <p class="section-subtitle">Our precision components serve critical applications across the {{ industry.name }} sector.</p>
+            </div>
+            
+            <div class="applications-grid">
+                {% for app in applications %}
+                <div class="application-card">
+                    <i data-lucide="check-circle"></i>
+                    <h4>Application</h4>
+                    <p>{{ app }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Standards -->
+    <section class="content-section alt">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">
+                    <i data-lucide="award"></i>
+                    Standards
+                </span>
+                <h2 class="section-title">Standards We Comply With</h2>
+                <p class="section-subtitle">Our products meet international standards required by the {{ industry.name }} sector.</p>
+            </div>
+            
+            <div class="standards-grid">
+                <div class="standard-badge">DIN</div>
+                <div class="standard-badge">ISO</div>
+                <div class="standard-badge">ASTM</div>
+                <div class="standard-badge">ASME</div>
+                <div class="standard-badge">BS</div>
+                <div class="standard-badge">EN</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="content-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">
+                    <i data-lucide="shield-check"></i>
+                    Why Nirmal Precision
+                </span>
+                <h2 class="section-title">Your {{ industry.name }} Component Partner</h2>
+            </div>
+            
+            <div class="grid grid-3" style="margin-top: 32px;">
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="shield-check"></i></div>
+                    <h4 class="feature-title">ISO 9001:2015 Certified</h4>
+                    <p class="feature-text">Quality management system ensuring consistent product quality and traceability.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="settings"></i></div>
+                    <h4 class="feature-title">Precision Engineering</h4>
+                    <p class="feature-text">Tolerances down to ±0.01mm using advanced CNC machining centers.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="truck"></i></div>
+                    <h4 class="feature-title">Global Export</h4>
+                    <p class="feature-text">Export to 80+ countries with complete documentation and logistics support.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products -->
+    {% if products %}
+    <section class="content-section alt">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">
+                    <i data-lucide="package"></i>
+                    Products
+                </span>
+                <h2 class="section-title">{{ industry.name }} Components We Supply</h2>
+                <p class="section-subtitle">Browse our range of precision fasteners and components suitable for {{ industry.name }} applications.</p>
+            </div>
+            
+            <div class="products-grid">
+                {% for product in products %}
+                <a href="{{ url_for('product_page', slug=product.slug) }}" style="background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: var(--transition); text-decoration: none; display: block;" onmouseover="this.style.borderColor='var(--primary)'; this.style.boxShadow='var(--shadow-lg)';" onmouseout="this.style.borderColor='var(--border)'; this.style.boxShadow='none';">
+                    <div style="height: 160px; background: var(--bg-light); display: flex; align-items: center; justify-content: center;">
+                        <img src="{{ product.image or 'https://via.placeholder.com/300x200?text=' + product.name }}" alt="{{ product.name }}" loading="lazy" style="max-width: 80%; max-height: 80%; object-fit: contain;">
+                    </div>
+                    <div style="padding: 16px;">
+                        {% if product.din_standard %}
+                        <span style="font-size: 10px; color: var(--primary); font-weight: 600;">{{ product.din_standard }}</span>
+                        {% endif %}
+                        <h4 style="font-size: 14px; font-weight: 600; margin: 4px 0; color: var(--text-dark);">{{ product.name }}</h4>
+                        <p style="font-size: 12px; color: var(--text-muted);">{{ product.material or product.category or '' }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-bg"></div>
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Need Components for {{ industry.name }}?</h2>
+                <p class="cta-text">
+                    Contact our team for custom specifications and requirements.
+                </p>
+                <div class="cta-buttons">
+                    <a href="{{ url_for('contact') }}" class="btn btn-white">
+                        <i data-lucide="mail"></i>
+                        Request Quote
+                    </a>
+                    <a href="{{ url_for('products_page') }}" class="btn" style="background: transparent; border: 2px solid white; color: white;">
+                        <i data-lucide="package"></i>
+                        View All Products
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

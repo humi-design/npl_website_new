@@ -1,10 +1,11 @@
 import os 
 import time
+import re
 from datetime import datetime
-from flask import Flask, render_template, request, redirect, url_for, session, flash, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_from_directory, abort
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
-from urllib.parse import quote_plus
+from urllib.parse import quote_plus, quote
 from werkzeug.utils import secure_filename
 import uuid
 import logging
@@ -37,10 +38,77 @@ app.secret_key = "supersecretkey"
 # ======================
 # FILE UPLOAD CONFIG
 # ======================
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'pdf', 'step', 'dwg'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# ======================
+# HELPER FUNCTIONS
+# ======================
+
+def slugify(text):
+    """Convert text to URL-friendly slug"""
+    text = text.lower()
+    text = re.sub(r'[^\w\s-]', '', text)
+    text = re.sub(r'[-\s]+', '-', text)
+    return text.strip('-')
+
+def generate_meta_content(product):
+    """Generate SEO meta title, description, and content for a product"""
+    # Generate meta title
+    standard = product.din_standard or product.iso_standard or product.astm_standard or ''
+    if standard:
+        meta_title = f"{standard} {product.name} Manufacturer | Nirmal Precision"
+    else:
+        meta_title = f"{product.name} Manufacturer | Nirmal Precision"
+    
+    # Generate meta description
+    material = product.material or ''
+    meta_desc = f"{product.name} - {product.short_description or 'Precision engineered'}. "
+    meta_desc += f"{material} material. "
+    if product.din_standard:
+        meta_desc += f"Complies with {product.din_standard}. "
+    meta_desc += f"ISO 9001:2015 certified. Global export to 80+ countries. Request quote."
+    
+    return meta_title, meta_desc
+
+def generate_product_content(product):
+    """Generate comprehensive product page content"""
+    standard = product.din_standard or product.iso_standard or product.astm_standard or 'Custom'
+    
+    # Introduction
+    intro = f"The {product.name} is a precision-engineered component designed for demanding industrial applications. "
+    intro += f"Manufactured by Nirmal Precision with over 25 years of expertise, this product meets international quality standards "
+    intro += f"and is trusted by engineers and procurement professionals worldwide."
+    
+    # Key Features
+    features = []
+    if product.material:
+        features.append(f"Premium {product.material} construction for durability and corrosion resistance")
+    if product.din_standard:
+        features.append(f"Compliant with {product.din_standard} German industrial standards")
+    if product.iso_standard:
+        features.append(f"Meets {product.iso_standard} international specifications")
+    if product.astm_standard:
+        features.append(f"Conforms to {product.astm_standard} American standards")
+    features.append("Precision manufacturing with tight tolerances")
+    features.append("100% quality inspection before dispatch")
+    features.append("Complete documentation and traceability")
+    
+    # Applications
+    applications = product.applications.split('\n') if product.applications else []
+    
+    # Industries
+    industries = product.industries.split('\n') if product.industries else []
+    
+    return {
+        'intro': intro,
+        'features': features,
+        'applications': [a.strip() for a in applications if a.strip()],
+        'industries': [i.strip() for i in industries if i.strip()],
+        'standard': standard
+    }
 
 # ======================
 # MODELS
@@ -51,16 +119,169 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(50))
     name = db.Column(db.String(200))
+    
+    # URL Slug
+    slug = db.Column(db.String(255), unique=True, nullable=False)
+    
+    # Standards
+    din_standard = db.Column(db.String(50))
+    iso_standard = db.Column(db.String(50))
+    astm_standard = db.Column(db.String(50))
+    
+    # Categorization
     category = db.Column(db.String(100))
+    subcategory = db.Column(db.String(100))
+    
+    # Descriptions
+    short_description = db.Column(db.String(500))
+    long_description = db.Column(db.Text)
+    
+    # Content
+    applications = db.Column(db.Text)
+    industries = db.Column(db.Text)
+    materials = db.Column(db.Text)
+    surface_finish = db.Column(db.Text)
+    available_sizes = db.Column(db.Text)
+    thread_types = db.Column(db.Text)
+    manufacturing_process = db.Column(db.Text)
+    tolerance = db.Column(db.String(100))
+    quality_standards = db.Column(db.Text)
+    technical_specifications = db.Column(db.Text)
+    
+    # Specs
     material = db.Column(db.String(100))
     size = db.Column(db.String(100))
     standard = db.Column(db.String(100))
+    
+    # SEO Fields
+    meta_title = db.Column(db.String(255))
+    meta_description = db.Column(db.Text)
+    keywords = db.Column(db.Text)
+    canonical_url = db.Column(db.String(500))
+    og_title = db.Column(db.String(255))
+    og_description = db.Column(db.Text)
+    twitter_title = db.Column(db.String(255))
+    twitter_description = db.Column(db.Text)
+    
+    # Media
     image = db.Column(db.String(500))
+    images = db.Column(db.Text)  # JSON string of multiple images
+    downloads = db.Column(db.Text)  # JSON string of download links
+    
+    # Status
+    status = db.Column(db.String(20), default='active')
+    featured = db.Column(db.Boolean, default=False)
+    
+    # Timestamps
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    def get_related_products(self):
+        """Get related products based on category and material"""
+        return Product.query.filter(
+            Product.category == self.category,
+            Product.id != self.id,
+            Product.status == 'active'
+        ).limit(8).all()
+    
+    def get_slug(self):
+        """Generate URL slug"""
+        if self.slug:
+            return self.slug
+        standard = self.din_standard or self.iso_standard or ''
+        name = self.name.lower().replace(' ', '-')
+        if standard:
+            return f"{standard.lower().replace(' ', '-')}-{name}"
+        return name
+
+
+class ProductCategory(db.Model):
+    __tablename__ = "product_categories"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    slug = db.Column(db.String(100), unique=True)
+    description = db.Column(db.Text)
+    parent_id = db.Column(db.Integer, db.ForeignKey('product_categories.id'))
+    meta_title = db.Column(db.String(255))
+    meta_description = db.Column(db.Text)
+    image = db.Column(db.String(500))
+    order = db.Column(db.Integer, default=0)
+    status = db.Column(db.String(20), default='active')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class Material(db.Model):
+    __tablename__ = "materials"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    slug = db.Column(db.String(100), unique=True)
+    description = db.Column(db.Text)
+    properties = db.Column(db.Text)
+    applications = db.Column(db.Text)
+    advantages = db.Column(db.Text)
+    industries = db.Column(db.Text)
+    meta_title = db.Column(db.String(255))
+    meta_description = db.Column(db.Text)
+    image = db.Column(db.String(500))
+    status = db.Column(db.String(20), default='active')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class Industry(db.Model):
+    __tablename__ = "industries"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    slug = db.Column(db.String(100), unique=True)
+    description = db.Column(db.Text)
+    applications = db.Column(db.Text)
+    products = db.Column(db.Text)  # Related product keywords
+    meta_title = db.Column(db.String(255))
+    meta_description = db.Column(db.Text)
+    image = db.Column(db.String(500))
+    status = db.Column(db.String(20), default='active')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class BlogPost(db.Model):
+    __tablename__ = "blog_posts"
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255))
+    slug = db.Column(db.String(255), unique=True)
+    content = db.Column(db.Text)
+    excerpt = db.Column(db.String(500))
+    category = db.Column(db.String(100))
+    tags = db.Column(db.String(255))
+    image = db.Column(db.String(500))
+    author = db.Column(db.String(100))
+    status = db.Column(db.String(20), default='draft')
+    published_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    meta_title = db.Column(db.String(255))
+    meta_description = db.Column(db.Text)
+
+
+class ProductFAQ(db.Model):
+    __tablename__ = "product_faqs"
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    question = db.Column(db.String(500))
+    answer = db.Column(db.Text)
+    order = db.Column(db.Integer, default=0)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class ProductRelated(db.Model):
+    __tablename__ = "product_related"
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    related_id = db.Column(db.Integer, db.ForeignKey('products.id'))
 
 
 class Cart(db.Model):
+    __tablename__ = "carts"
     id = db.Column(db.Integer, primary_key=True)
-    session_id = db.Column(db.String(100))   # ✅ ADD THIS
+    session_id = db.Column(db.String(100))
     product_id = db.Column(db.Integer)
     qty = db.Column(db.Integer)
 
@@ -102,6 +323,7 @@ class Country(db.Model):
     __tablename__ = "countries"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
+    slug = db.Column(db.String(100), unique=True)
 
 
 class ExportStat(db.Model):
@@ -950,8 +1172,9 @@ def robots():
 User-agent: *
 Allow: /
 
-# Sitemap location
+# Sitemap locations
 Sitemap: https://nirmalprecision.com/sitemap.xml
+Sitemap: https://nirmalprecision.com/sitemap-dynamic.xml
 
 # Crawl-delay for polite crawling
 Crawl-delay: 1
@@ -973,6 +1196,19 @@ User-agent: Baiduspider
 Allow: /
 
 User-agent: YandexBot
+Allow: /
+
+# AI Bots
+User-agent: GPTBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
 Allow: /
 
 # Block admin areas
@@ -1124,6 +1360,686 @@ def precision_machined():
 def cnc_machined():
     """Landing page for CNC machined parts"""
     return render_template('landing/cnc_machined.html')
+
+
+# ======================
+# PRODUCT PAGES (SEO-FRIENDLY URLS)
+# ======================
+
+@app.route("/products/<slug>")
+def product_page(slug):
+    """Individual product page with SEO-friendly URL"""
+    product = Product.query.filter_by(slug=slug, status='active').first()
+    
+    if not product:
+        abort(404)
+    
+    # Get related products
+    related_products = product.get_related_products()
+    
+    # Get FAQs for this product
+    faqs = ProductFAQ.query.filter_by(product_id=product.id).order_by(ProductFAQ.order).all()
+    
+    # Generate meta content if not set
+    if not product.meta_title:
+        product.meta_title = f"{product.din_standard or product.iso_standard or ''} {product.name} | Nirmal Precision"
+    if not product.meta_description:
+        product.meta_description = f"{product.name} - {product.short_description or 'Precision engineered component'}. "
+        if product.material:
+            product.meta_description += f"{product.material} material. "
+        if product.din_standard:
+            product.meta_description += f"Complies with {product.din_standard}. "
+        product.meta_description += "ISO 9001:2015 certified. Global export available."
+    
+    # Generate content
+    content = generate_product_content(product)
+    
+    # Get all categories for navigation
+    all_categories = ProductCategory.query.filter_by(status='active').all()
+    
+    return render_template(
+        'product.html',
+        product=product,
+        related_products=related_products,
+        faqs=faqs,
+        content=content,
+        categories=all_categories
+    )
+
+
+@app.route("/category/<slug>")
+def category_page(slug):
+    """Category page with SEO-friendly URL"""
+    category = ProductCategory.query.filter_by(slug=slug, status='active').first()
+    
+    if not category:
+        abort(404)
+    
+    # Get products in this category
+    products = Product.query.filter_by(category=category.name, status='active').all()
+    
+    # Get subcategories
+    subcategories = ProductCategory.query.filter_by(parent_id=category.id, status='active').all()
+    
+    # Generate meta content
+    if not category.meta_title:
+        category.meta_title = f"{category.name} | Precision Fasteners & Components | Nirmal Precision"
+    if not category.meta_description:
+        category.meta_description = f"Browse our comprehensive range of {category.name.lower()}. "
+        category.meta_description += "Precision engineered components manufactured to DIN, ISO, and ASTM standards. "
+        category.meta_description += "ISO 9001:2015 certified. Global export to 80+ countries."
+    
+    return render_template(
+        'category.html',
+        category=category,
+        products=products,
+        subcategories=subcategories
+    )
+
+
+@app.route("/material/<slug>")
+def material_page(slug):
+    """Material page with SEO-friendly URL"""
+    material = Material.query.filter_by(slug=slug, status='active').first()
+    
+    if not material:
+        abort(404)
+    
+    # Get products with this material
+    products = Product.query.filter(
+        Product.materials.contains(material.name),
+        Product.status == 'active'
+    ).all()
+    
+    # Parse lists
+    material_properties = material.properties.split('\n') if material.properties else []
+    material_applications = material.applications.split('\n') if material.applications else []
+    material_advantages = material.advantages.split('\n') if material.advantages else []
+    material_industries = material.industries.split('\n') if material.industries else []
+    
+    return render_template(
+        'material.html',
+        material=material,
+        products=products,
+        properties=material_properties,
+        applications=material_applications,
+        advantages=material_advantages,
+        industries=material_industries
+    )
+
+
+@app.route("/industry/<slug>")
+def industry_page(slug):
+    """Industry page with SEO-friendly URL"""
+    industry = Industry.query.filter_by(slug=slug, status='active').first()
+    
+    if not industry:
+        abort(404)
+    
+    # Get products related to this industry
+    industry_products = []
+    if industry.products:
+        keywords = industry.products.lower().split(',')
+        for keyword in keywords:
+            keyword = keyword.strip()
+            if keyword:
+                found = Product.query.filter(
+                    Product.industries.contains(keyword),
+                    Product.status == 'active'
+                ).all()
+                for p in found:
+                    if p not in industry_products:
+                        industry_products.append(p)
+    
+    # Parse lists
+    industry_applications = industry.applications.split('\n') if industry.applications else []
+    
+    return render_template(
+        'industry.html',
+        industry=industry,
+        products=industry_products[:12],
+        applications=industry_applications
+    )
+
+
+@app.route("/search")
+def search():
+    """Enhanced search with DIN/ISO support"""
+    query = request.args.get('q', '')
+    category = request.args.get('category', '')
+    material = request.args.get('material', '')
+    standard = request.args.get('standard', '')
+    
+    products_query = Product.query.filter(Product.status == 'active')
+    
+    if query:
+        # Search in name, code, descriptions, standards
+        search_filter = (
+            Product.name.contains(query) |
+            Product.code.contains(query) |
+            Product.short_description.contains(query) |
+            Product.din_standard.contains(query) |
+            Product.iso_standard.contains(query) |
+            Product.astm_standard.contains(query) |
+            Product.keywords.contains(query)
+        )
+        products_query = products_query.filter(search_filter)
+    
+    if category:
+        products_query = products_query.filter(Product.category == category)
+    
+    if material:
+        products_query = products_query.filter(
+            Product.materials.contains(material) |
+            Product.material.contains(material)
+        )
+    
+    if standard:
+        standard_filter = (
+            Product.din_standard.contains(standard) |
+            Product.iso_standard.contains(standard) |
+            Product.astm_standard.contains(standard)
+        )
+        products_query = products_query.filter(standard_filter)
+    
+    products = products_query.all()
+    
+    # Get all categories for filters
+    all_categories = ProductCategory.query.filter_by(status='active').all()
+    
+    return render_template(
+        'search.html',
+        products=products,
+        query=query,
+        selected_category=category,
+        selected_material=material,
+        selected_standard=standard,
+        categories=all_categories
+    )
+
+
+# ======================
+# ADMIN: PRODUCT MANAGEMENT
+# ======================
+
+@app.route("/admin/products")
+def admin_products():
+    """Product management page"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    products = Product.query.order_by(Product.created_at.desc()).all()
+    return render_template('admin_products.html', products=products)
+
+
+@app.route("/admin/product/add", methods=["GET", "POST"])
+def admin_product_add():
+    """Add new product"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    if request.method == "POST":
+        # Generate slug from name and standard
+        slug_base = slugify(request.form.get('name', ''))
+        standard = request.form.get('din_standard') or request.form.get('iso_standard') or ''
+        slug = f"{slugify(standard)}-{slug_base}" if standard else slug_base
+        
+        # Ensure unique slug
+        existing = Product.query.filter_by(slug=slug).first()
+        counter = 1
+        base_slug = slug
+        while existing:
+            slug = f"{base_slug}-{counter}"
+            existing = Product.query.filter_by(slug=slug).first()
+            counter += 1
+        
+        # Handle image
+        image_path = ''
+        if 'image_file' in request.files:
+            file = request.files['image_file']
+            if file and file.filename and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                filename = f"{int(time.time())}_{filename}"
+                upload_path = os.path.join(app.root_path, 'static', 'img', 'products', filename)
+                file.save(upload_path)
+                image_path = f'/static/img/products/{filename}'
+        
+        # Create product
+        product = Product(
+            code=request.form.get('code'),
+            name=request.form.get('name'),
+            slug=slug,
+            din_standard=request.form.get('din_standard'),
+            iso_standard=request.form.get('iso_standard'),
+            astm_standard=request.form.get('astm_standard'),
+            category=request.form.get('category'),
+            subcategory=request.form.get('subcategory'),
+            short_description=request.form.get('short_description'),
+            long_description=request.form.get('long_description'),
+            applications=request.form.get('applications'),
+            industries=request.form.get('industries'),
+            materials=request.form.get('materials'),
+            surface_finish=request.form.get('surface_finish'),
+            available_sizes=request.form.get('available_sizes'),
+            thread_types=request.form.get('thread_types'),
+            manufacturing_process=request.form.get('manufacturing_process'),
+            tolerance=request.form.get('tolerance'),
+            quality_standards=request.form.get('quality_standards'),
+            technical_specifications=request.form.get('technical_specifications'),
+            material=request.form.get('material'),
+            size=request.form.get('size'),
+            standard=request.form.get('standard'),
+            meta_title=request.form.get('meta_title'),
+            meta_description=request.form.get('meta_description'),
+            keywords=request.form.get('keywords'),
+            image=image_path,
+            status=request.form.get('status', 'active')
+        )
+        
+        db.session.add(product)
+        db.session.commit()
+        
+        flash('Product added successfully!')
+        return redirect(url_for('admin_products'))
+    
+    categories = ProductCategory.query.filter_by(status='active').all()
+    return render_template('admin_product_form.html', product=None, categories=categories)
+
+
+@app.route("/admin/product/<int:id>/edit", methods=["GET", "POST"])
+def admin_product_edit(id):
+    """Edit existing product"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    product = Product.query.get(id)
+    if not product:
+        abort(404)
+    
+    if request.method == "POST":
+        product.code = request.form.get('code')
+        product.name = request.form.get('name')
+        product.din_standard = request.form.get('din_standard')
+        product.iso_standard = request.form.get('iso_standard')
+        product.astm_standard = request.form.get('astm_standard')
+        product.category = request.form.get('category')
+        product.subcategory = request.form.get('subcategory')
+        product.short_description = request.form.get('short_description')
+        product.long_description = request.form.get('long_description')
+        product.applications = request.form.get('applications')
+        product.industries = request.form.get('industries')
+        product.materials = request.form.get('materials')
+        product.surface_finish = request.form.get('surface_finish')
+        product.available_sizes = request.form.get('available_sizes')
+        product.thread_types = request.form.get('thread_types')
+        product.manufacturing_process = request.form.get('manufacturing_process')
+        product.tolerance = request.form.get('tolerance')
+        product.quality_standards = request.form.get('quality_standards')
+        product.technical_specifications = request.form.get('technical_specifications')
+        product.material = request.form.get('material')
+        product.size = request.form.get('size')
+        product.standard = request.form.get('standard')
+        product.meta_title = request.form.get('meta_title')
+        product.meta_description = request.form.get('meta_description')
+        product.keywords = request.form.get('keywords')
+        product.status = request.form.get('status', 'active')
+        
+        # Handle new image
+        if 'image_file' in request.files:
+            file = request.files['image_file']
+            if file and file.filename and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                filename = f"{int(time.time())}_{filename}"
+                upload_path = os.path.join(app.root_path, 'static', 'img', 'products', filename)
+                file.save(upload_path)
+                product.image = f'/static/img/products/{filename}'
+        
+        # Update slug if name changed
+        if request.form.get('update_slug'):
+            slug_base = slugify(request.form.get('name', ''))
+            standard = request.form.get('din_standard') or request.form.get('iso_standard') or ''
+            new_slug = f"{slugify(standard)}-{slug_base}" if standard else slug_base
+            product.slug = new_slug
+        
+        product.updated_at = datetime.utcnow()
+        db.session.commit()
+        
+        flash('Product updated successfully!')
+        return redirect(url_for('admin_products'))
+    
+    categories = ProductCategory.query.filter_by(status='active').all()
+    return render_template('admin_product_form.html', product=product, categories=categories)
+
+
+@app.route("/admin/product/<int:id>/delete")
+def admin_product_delete(id):
+    """Delete product"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    product = Product.query.get(id)
+    if product:
+        db.session.delete(product)
+        db.session.commit()
+        flash('Product deleted successfully!')
+    
+    return redirect(url_for('admin_products'))
+
+
+@app.route("/admin/product/<int:id>/faqs")
+def admin_product_faqs(id):
+    """Manage product FAQs"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    product = Product.query.get(id)
+    if not product:
+        abort(404)
+    
+    faqs = ProductFAQ.query.filter_by(product_id=id).order_by(ProductFAQ.order).all()
+    
+    return render_template('admin_product_faqs.html', product=product, faqs=faqs)
+
+
+@app.route("/admin/product/<int:id>/faq/add", methods=["POST"])
+def admin_product_faq_add(id):
+    """Add FAQ to product"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    faq = ProductFAQ(
+        product_id=id,
+        question=request.form.get('question'),
+        answer=request.form.get('answer'),
+        order=int(request.form.get('order', 0))
+    )
+    db.session.add(faq)
+    db.session.commit()
+    
+    flash('FAQ added successfully!')
+    return redirect(url_for('admin_product_faqs', id=id))
+
+
+@app.route("/admin/product/<int:id>/faq/<int:faq_id>/delete")
+def admin_product_faq_delete(id, faq_id):
+    """Delete product FAQ"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    faq = ProductFAQ.query.get(faq_id)
+    if faq:
+        db.session.delete(faq)
+        db.session.commit()
+        flash('FAQ deleted successfully!')
+    
+    return redirect(url_for('admin_product_faqs', id=id))
+
+
+# ======================
+# ADMIN: CATEGORY MANAGEMENT
+# ======================
+
+@app.route("/admin/categories")
+def admin_categories():
+    """Category management page"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    categories = ProductCategory.query.order_by(ProductCategory.order).all()
+    return render_template('admin_categories.html', categories=categories)
+
+
+@app.route("/admin/category/add", methods=["POST"])
+def admin_category_add():
+    """Add new category"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    slug = slugify(request.form.get('name', ''))
+    
+    category = ProductCategory(
+        name=request.form.get('name'),
+        slug=slug,
+        description=request.form.get('description'),
+        meta_title=request.form.get('meta_title'),
+        meta_description=request.form.get('meta_description'),
+        order=int(request.form.get('order', 0))
+    )
+    
+    db.session.add(category)
+    db.session.commit()
+    
+    flash('Category added successfully!')
+    return redirect(url_for('admin_categories'))
+
+
+# ======================
+# ADMIN: MATERIAL MANAGEMENT
+# ======================
+
+@app.route("/admin/materials")
+def admin_materials():
+    """Material management page"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    materials = Material.query.all()
+    return render_template('admin_materials.html', materials=materials)
+
+
+@app.route("/admin/material/add", methods=["POST"])
+def admin_material_add():
+    """Add new material"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    slug = slugify(request.form.get('name', ''))
+    
+    material = Material(
+        name=request.form.get('name'),
+        slug=slug,
+        description=request.form.get('description'),
+        properties=request.form.get('properties'),
+        applications=request.form.get('applications'),
+        advantages=request.form.get('advantages'),
+        industries=request.form.get('industries'),
+        meta_title=request.form.get('meta_title'),
+        meta_description=request.form.get('meta_description')
+    )
+    
+    db.session.add(material)
+    db.session.commit()
+    
+    flash('Material added successfully!')
+    return redirect(url_for('admin_materials'))
+
+
+# ======================
+# ADMIN: INDUSTRY MANAGEMENT
+# ======================
+
+@app.route("/admin/industries")
+def admin_industries():
+    """Industry management page"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    industries = Industry.query.all()
+    return render_template('admin_industries.html', industries=industries)
+
+
+@app.route("/admin/industry/add", methods=["POST"])
+def admin_industry_add():
+    """Add new industry"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    slug = slugify(request.form.get('name', ''))
+    
+    industry = Industry(
+        name=request.form.get('name'),
+        slug=slug,
+        description=request.form.get('description'),
+        applications=request.form.get('applications'),
+        products=request.form.get('products'),
+        meta_title=request.form.get('meta_title'),
+        meta_description=request.form.get('meta_description')
+    )
+    
+    db.session.add(industry)
+    db.session.commit()
+    
+    flash('Industry added successfully!')
+    return redirect(url_for('admin_industries'))
+
+
+# ======================
+# ADMIN: BLOG MANAGEMENT
+# ======================
+
+@app.route("/admin/blog")
+def admin_blog():
+    """Blog management page"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    posts = BlogPost.query.order_by(BlogPost.created_at.desc()).all()
+    return render_template('admin_blog.html', posts=posts)
+
+
+@app.route("/admin/blog/add", methods=["GET", "POST"])
+def admin_blog_add():
+    """Add new blog post"""
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    
+    if request.method == "POST":
+        slug = slugify(request.form.get('title', ''))
+        
+        # Ensure unique slug
+        existing = BlogPost.query.filter_by(slug=slug).first()
+        if existing:
+            slug = f"{slug}-{int(time.time())}"
+        
+        post = BlogPost(
+            title=request.form.get('title'),
+            slug=slug,
+            content=request.form.get('content'),
+            excerpt=request.form.get('excerpt'),
+            category=request.form.get('category'),
+            tags=request.form.get('tags'),
+            author=request.form.get('author'),
+            status=request.form.get('status', 'draft'),
+            published_at=datetime.utcnow() if request.form.get('status') == 'published' else None,
+            meta_title=request.form.get('meta_title'),
+            meta_description=request.form.get('meta_description')
+        )
+        
+        db.session.add(post)
+        db.session.commit()
+        
+        flash('Blog post created successfully!')
+        return redirect(url_for('admin_blog'))
+    
+    return render_template('admin_blog_form.html', post=None)
+
+
+# ======================
+# DYNAMIC SITEMAP UPDATE
+# ======================
+
+@app.route("/sitemap-dynamic.xml")
+def sitemap_dynamic():
+    """Generate comprehensive dynamic sitemap"""
+    from flask import Response
+    
+    xml_sitemap = '''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+'''
+    
+    today = datetime.now().strftime('%Y-%m-%d')
+    
+    # Static pages
+    static_pages = [
+        {"loc": "https://nirmalprecision.com/", "priority": "1.0", "changefreq": "daily"},
+        {"loc": "https://nirmalprecision.com/about", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://nirmalprecision.com/products", "priority": "0.9", "changefreq": "daily"},
+        {"loc": "https://nirmalprecision.com/export", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://nirmalprecision.com/contact", "priority": "0.7", "changefreq": "monthly"},
+        {"loc": "https://nirmalprecision.com/blog", "priority": "0.6", "changefreq": "weekly"},
+    ]
+    
+    for page in static_pages:
+        xml_sitemap += f'''    <url>
+        <loc>{page["loc"]}</loc>
+        <priority>{page["priority"]}</priority>
+        <changefreq>{page["changefreq"]}</changefreq>
+        <lastmod>{today}</lastmod>
+    </url>
+'''
+    
+    # Products with slugs
+    products = Product.query.filter_by(status='active').all()
+    for product in products:
+        if product.slug:
+            xml_sitemap += f'''    <url>
+        <loc>https://nirmalprecision.com/products/{product.slug}</loc>
+        <priority>0.8</priority>
+        <changefreq>weekly</changefreq>
+        <lastmod>{product.updated_at.strftime('%Y-%m-%d') if product.updated_at else today}</lastmod>
+    </url>
+'''
+    
+    # Categories
+    categories = ProductCategory.query.filter_by(status='active').all()
+    for cat in categories:
+        xml_sitemap += f'''    <url>
+        <loc>https://nirmalprecision.com/category/{cat.slug}</loc>
+        <priority>0.7</priority>
+        <changefreq>weekly</changefreq>
+        <lastmod>{today}</lastmod>
+    </url>
+'''
+    
+    # Materials
+    materials = Material.query.filter_by(status='active').all()
+    for mat in materials:
+        xml_sitemap += f'''    <url>
+        <loc>https://nirmalprecision.com/material/{mat.slug}</loc>
+        <priority>0.6</priority>
+        <changefreq>monthly</changefreq>
+        <lastmod>{today}</lastmod>
+    </url>
+'''
+    
+    # Industries
+    industries = Industry.query.filter_by(status='active').all()
+    for ind in industries:
+        xml_sitemap += f'''    <url>
+        <loc>https://nirmalprecision.com/industry/{ind.slug}</loc>
+        <priority>0.6</priority>
+        <changefreq>monthly</changefreq>
+        <lastmod>{today}</lastmod>
+    </url>
+'''
+    
+    # Blog posts
+    posts = BlogPost.query.filter_by(status='published').all()
+    for post in posts:
+        if post.published_at:
+            xml_sitemap += f'''    <url>
+        <loc>https://nirmalprecision.com/blog/{post.slug}</loc>
+        <priority>0.5</priority>
+        <changefreq>monthly</changefreq>
+        <lastmod>{post.updated_at.strftime('%Y-%m-%d') if post.updated_at else today}</lastmod>
+    </url>
+'''
+    
+    xml_sitemap += '</urlset>'
+    
+    return Response(xml_sitemap, mimetype='application/xml')
 
 
 if __name__ == "__main__":
