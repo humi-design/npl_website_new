@@ -2084,5 +2084,20 @@ def sitemap_dynamic():
     return Response(xml_sitemap, mimetype='application/xml')
 
 
+# ======================
+# INVOICE GENERATOR
+# ======================
+# Registered as an isolated blueprint. It owns its own tables and never
+# touches the existing CRM/customer/order models.
+from invoices import create_invoice_blueprint  # noqa: E402
+
+app.register_blueprint(
+    create_invoice_blueprint(
+        db,
+        crm_models={"customer": Quote, "product": Product},
+    )
+)
+
+
 if __name__ == "__main__":
     app.run(debug=True)

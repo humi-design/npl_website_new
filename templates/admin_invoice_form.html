@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ 'Edit Invoice' if invoice else 'Create Invoice' }} | Admin | Nirmal Precision</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--primary:#0A4D9C;--primary-light:#1E88E5;--success:#10B981;--warning:#F59E0B;--danger:#EF4444;--dark:#0F172A;--gray-900:#111827;--gray-700:#374151;--gray-600:#4B5563;--gray-500:#6B7280;--gray-400:#9CA3AF;--gray-300:#D1D5DB;--gray-200:#E5E7EB;--gray-100:#F3F4F6;--gray-50:#F9FAFB;--white:#FFFFFF;--radius:12px;--shadow:0 1px 3px 0 rgb(0 0 0 / 0.1)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,sans-serif;background:var(--gray-100);color:var(--gray-900)}
+.admin-layout{display:flex;min-height:100vh}
+.sidebar{width:280px;background:linear-gradient(180deg,var(--dark) 0%,#020617 100%);padding:24px 0;position:fixed;height:100vh;overflow-y:auto}
+.sidebar-header{padding:0 24px 24px;border-bottom:1px solid rgba(255,255,255,0.1);margin-bottom:24px}
+.logo-icon{width:48px;height:48px;background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:var(--white)}
+.logo-text h2{font-size:18px;font-weight:700;color:var(--white)}
+.logo-text span{font-size:11px;color:var(--gray-400);text-transform:uppercase;letter-spacing:1px}
+.nav-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:var(--radius);color:var(--gray-400);text-decoration:none;transition:all 0.2s;margin-bottom:4px}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:var(--white)}
+.nav-item.active{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:var(--white)}
+.nav-item i{width:20px;text-align:center}
+.sidebar-footer{padding:24px;border-top:1px solid rgba(255,255,255,0.1)}
+.logout-btn{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:var(--radius);color:var(--danger);text-decoration:none;font-size:14px;font-weight:500}
+.logout-btn:hover{background:var(--danger);color:var(--white)}
+.main-content{flex:1;margin-left:280px;padding:32px;max-width:1600px}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--gray-500);margin-bottom:8px}
+.breadcrumb a{color:var(--gray-500);text-decoration:none}
+.breadcrumb a:hover{color:var(--primary)}
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:16px;flex-wrap:wrap}
+.page-title h1{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-title p{font-size:14px;color:var(--gray-500)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:var(--radius);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all 0.2s;border:none;text-decoration:none}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:var(--white)}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-secondary{background:var(--white);color:var(--gray-700);border:1px solid var(--gray-200)}
+.btn-secondary:hover{background:var(--gray-50)}
+.btn-success{background:var(--success);color:var(--white)}
+.btn-danger{background:var(--danger);color:var(--white)}
+.btn-sm{padding:8px 14px;font-size:13px}
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:20px;overflow:hidden}
+.card-header{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;border-bottom:1px solid var(--gray-200);cursor:pointer;user-select:none}
+.card-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:10px}
+.card-title i{color:var(--primary)}
+.collapse-icon{color:var(--gray-400);transition:transform 0.2s}
+.collapsed .collapse-icon{transform:rotate(-90deg)}
+.card-body{padding:22px}
+.collapsed .card-body{display:none}
+.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.form-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.span2{grid-column:span 2}
+.form-group.span3{grid-column:span 3}
+.form-group.span4{grid-column:span 4}
+.form-label{font-size:12px;font-weight:600;color:var(--gray-700)}
+.form-label .req{color:var(--danger)}
+.form-input,.form-select,.form-textarea{padding:10px 12px;border:2px solid var(--gray-200);border-radius:8px;font-size:13px;font-family:inherit;background:var(--white);width:100%}
+.form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;border-color:var(--primary)}
+.form-textarea{min-height:70px;resize:vertical}
+.form-hint{font-size:11px;color:var(--gray-500)}
+.section-note{background:#EFF6FF;border:1px solid #BFDBFE;color:#1E40AF;border-radius:8px;padding:10px 14px;font-size:12px;margin-bottom:16px}
+.alert{border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:14px;display:flex;align-items:center;gap:10px}
+.alert-error{background:#FEE2E2;border:1px solid #FCA5A5;color:#991B1B}
+.alert-success{background:#DCFCE7;border:1px solid #86EFAC;color:#166534}
+.alert-warning{background:#FEF3C7;border:1px solid #FCD34D;color:#92400E}
+.items-container{overflow-x:auto}
+.items-table{width:100%;border-collapse:collapse;min-width:1250px}
+.items-table th{background:var(--gray-50);font-size:11px;text-transform:uppercase;letter-spacing:0.4px;color:var(--gray-500);padding:10px 8px;text-align:left;border-bottom:1px solid var(--gray-200);white-space:nowrap}
+.items-table td{padding:8px 6px;border-bottom:1px solid var(--gray-100);vertical-align:middle}
+.items-table input,.items-table select{padding:8px;border:1px solid var(--gray-200);border-radius:6px;font-size:12px;font-family:inherit;width:100%}
+.items-table input:focus,.items-table select:focus{outline:none;border-color:var(--primary)}
+.col-num{width:52px}.col-pkg{width:78px}.col-ptype{width:96px}.col-qty{width:92px}.col-rate{width:104px}.col-cur{width:70px}.col-amt{width:110px}.col-hs{width:96px}.col-ord{width:104px}
+.drag-handle{cursor:move;color:var(--gray-400);text-align:center}
+.totals-bar{display:flex;justify-content:flex-end;align-items:center;gap:16px;padding:16px 22px;background:var(--gray-50);border-top:1px solid var(--gray-200);flex-wrap:wrap}
+.total-label{font-size:13px;font-weight:600;color:var(--gray-600)}
+.total-value{font-size:20px;font-weight:800;color:var(--gray-900)}
+.override-box{display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--gray-200);border-radius:8px;padding:8px 12px}
+.checkbox-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-700)}
+.checkbox-row input{width:16px;height:16px}
+.actions-sticky{position:sticky;bottom:0;background:var(--white);border-top:1px solid var(--gray-200);padding:16px 22px;display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;z-index:20;box-shadow:0 -2px 10px rgba(0,0,0,0.04)}
+.crm-search{display:flex;gap:8px;margin-bottom:10px}
+.crm-results{border:1px solid var(--gray-200);border-radius:8px;max-height:220px;overflow-y:auto;display:none}
+.crm-results.show{display:block}
+.crm-item{padding:10px 14px;border-bottom:1px solid var(--gray-100);cursor:pointer;font-size:13px}
+.crm-item:hover{background:var(--gray-50)}
+.crm-item strong{display:block}
+.crm-item span{color:var(--gray-500);font-size:12px}
+.signature-preview{max-height:60px;border:1px solid var(--gray-200);border-radius:6px;padding:4px;background:var(--white)}
+@media (max-width:1500px){.form-grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:1200px){.form-grid{grid-template-columns:repeat(2,1fr)}.form-grid-3{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:992px){.sidebar{position:static;width:100%;height:auto}.admin-layout{flex-direction:column}.main-content{margin-left:0}}
+@media (max-width:700px){.form-grid,.form-grid-3{grid-template-columns:1fr}.form-group.span2,.form-group.span3,.form-group.span4{grid-column:span 1}}
+</style>
+</head>
+<body>
+<div class="admin-layout">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div style="display:flex;align-items:center;gap:12px">
+                <div class="logo-icon">NP</div>
+                <div class="logo-text"><h2>Nirmal</h2><span>Admin Panel</span></div>
+            </div>
+        </div>
+        <nav style="padding:0 12px">
+            <a href="{{ url_for('admin') }}" class="nav-item"><i class="fas fa-home"></i><span>Dashboard</span></a>
+            <a href="{{ url_for('admin_products') }}" class="nav-item"><i class="fas fa-box"></i><span>Products</span></a>
+            <a href="{{ url_for('admin_categories') }}" class="nav-item"><i class="fas fa-tags"></i><span>Categories</span></a>
+            <a href="{{ url_for('admin_materials') }}" class="nav-item"><i class="fas fa-layer-group"></i><span>Materials</span></a>
+            <a href="{{ url_for('admin_industries') }}" class="nav-item"><i class="fas fa-industry"></i><span>Industries</span></a>
+            <a href="{{ url_for('admin_blog') }}" class="nav-item"><i class="fas fa-blog"></i><span>Blog</span></a>
+            <a href="{{ url_for('invoices.invoice_list') }}" class="nav-item active"><i class="fas fa-file-invoice"></i><span>Invoices</span></a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="{{ url_for('admin_logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="breadcrumb">
+            <a href="{{ url_for('admin') }}">Admin</a>
+            <i class="fas fa-chevron-right" style="font-size:10px"></i>
+            <a href="{{ url_for('invoices.invoice_list') }}">Invoices</a>
+            <i class="fas fa-chevron-right" style="font-size:10px"></i>
+            <span>{{ 'Edit ' + invoice.invoice_number if invoice else 'Create Invoice' }}</span>
+        </div>
+
+        <div class="page-header">
+            <div class="page-title">
+                <h1>{{ 'Edit Invoice' if invoice else 'Create Invoice' }}</h1>
+                <p>{{ 'Editing ' + invoice.invoice_number + ' (revision ' ~ invoice.revision ~ ')' if invoice else 'All fields are editable. Company details are pre-filled from Invoice Defaults.' }}</p>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+                {% if invoice %}
+                <a href="{{ url_for('invoices.invoice_view', invoice_id=invoice.id) }}" class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i> View</a>
+                <a href="{{ url_for('invoices.invoice_preview', invoice_id=invoice.id) }}" target="_blank" class="btn btn-secondary btn-sm"><i class="fas fa-magnifying-glass-chart"></i> Preview</a>
+                <a href="{{ url_for('invoices.invoice_pdf', invoice_id=invoice.id) }}" class="btn btn-secondary btn-sm"><i class="fas fa-file-pdf"></i> Download PDF</a>
+                {% endif %}
+                <a href="{{ url_for('invoices.invoice_list') }}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i> Back to List</a>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+            <div class="alert {{ 'alert-success' if category == 'success' else 'alert-error' }}">
+                <i class="fas {{ 'fa-circle-check' if category == 'success' else 'fa-circle-exclamation' }}"></i>
+                <span>{{ message }}</span>
+            </div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST" id="invoiceForm" action="{{ url_for('invoices.invoice_edit', invoice_id=invoice.id) if invoice else url_for('invoices.invoice_new') }}">
+            <input type="hidden" name="signature_image" id="signature_image" value="{{ payload.signature_image or '' }}">
+
+            <!-- 0. CRM IMPORT -->
+            <div class="card" id="card-crm">
+                <div class="card-header" onclick="toggleCard('card-crm')">
+                    <h3 class="card-title"><i class="fas fa-database"></i> Import from CRM (optional)</h3>
+                    <i class="fas fa-chevron-down collapse-icon"></i>
+                </div>
+                <div class="card-body">
+                    <div class="section-note">Imported CRM data fills the fields below and remains fully editable. Changing it here never modifies the original CRM record.</div>
+                    <div class="form-grid-3">
+                        <div>
+                            <label class="form-label">Search CRM Customer</label>
+                            <div class="crm-search">
+                                <input type="text" id="crmCustomerQ" class="form-input" placeholder="Company or contact name">
+                                <button type="button" class="btn btn-secondary btn-sm" onclick="searchCrm('customers')"><i class="fas fa-search"></i></button>
+                            </div>
+                            <div class="crm-results" id="crmCustomerResults"></div>
+                        </div>
+                        <div>
+                            <label class="form-label">Search CRM Order</label>
+                            <div class="crm-search">
+                                <input type="text" id="crmOrderQ" class="form-input" placeholder="Order / quote">
+                                <button type="button" class="btn btn-secondary btn-sm" onclick="searchCrm('orders')"><i class="fas fa-search"></i></button>
+                            </div>
+                            <div class="crm-results" id="crmOrderResults"></div>
+                        </div>
+                        <div>
+                            <label class="form-label">Search CRM Product</label>
+                            <div class="crm-search">
+                                <input type="text" id="crmProductQ" class="form-input" placeholder="Product name">
+                                <button type="button" class="btn btn-secondary btn-sm" onclick="searchCrm('products')"><i class="fas fa-search"></i></button>
+                            </div>
+                            <div class="crm-results" id="crmProductResults"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. INVOICE INFORMATION -->
+            <div class="card" id="card-info">
+                <div class="card-header" onclick="toggleCard('card-info')">
+                    <h3 class="card-title"><i class="fas fa-circle-info"></i> 1. Invoice Information</h3>
+                    <i class="fas fa-chevron-down collapse-icon"></i>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Invoice Number <span class="req">*</span></label>
+                            <input type="text" name="invoice_number" id="invoice_number" class="form-input" value="{{ payload.invoice_number or '' }}" required>
+                            <span class="form-hint">Suggested: {{ suggested_number }}</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Invoice Date <span class="req">*</span></label>
+                            <input type="date" name="invoice_date" class="form-input" value="{{ payload.invoice_date or '' }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Supplier A/C No.</label>
+                            <input type="text" name="supplier_ac_no" class="form-input" value="{{ payload.supplier_ac_no or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Currency <span class="req">*</span></label>
+                            <select name="currency" id="currency" class="form-select" required>
+                                {% for c in currencies %}
+                                <option value="{{ c }}" {{ 'selected' if payload.currency == c }}>{{ c }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Country of Origin</label>
+                            <input type="text" name="country_of_origin" class="form-input" value="{{ payload.country_of_origin or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Country of Final Destination</label>
+                            <input type="text" name="country_of_final_destination" class="form-input" value="{{ payload.country_of_final_destination or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Customer Order No.</label>
+                            <input type="text" name="customer_order_no" class="form-input" value="{{ payload.customer_order_no or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Internal Order No.</label>
+                            <input type="text" name="internal_order_no" class="form-input" value="{{ payload.internal_order_no or '' }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. EXPORTER -->
+            <div class="card" id="card-exporter">
+                <div class="card-header" onclick="toggleCard('card-exporter')">
+                    <h3 class="card-title"><i class="fas fa-building"></i> 2. Exporter / Supplier</h3>
+                    <i class="fas fa-chevron-down collapse-icon"></i>
+                </div>
+                <div class="card-body">
+                    <div class="section-note">These are editable. They are pre-filled from Invoice Defaults for new invoices and saved with this invoice as a snapshot.</div>
+                    <div class="form-grid">
+                        <div class="form-group span2">
+                            <label class="form-label">Exporter Name <span class="req">*</span></label>
+                            <input type="text" name="exporter_exporter_name" class="form-input" value="{{ payload.exporter.exporter_name or '' }}">
+                        </div>
+                        <div class="form-group span2">
+                            <label class="form-label">Telephone</label>
+                            <input type="text" name="exporter_telephone" class="form-input" value="{{ payload.exporter.telephone or '' }}">
+                        </div>
+                        <div class="form-group span2">
+                            <label class="form-label">Address Line 1</label>
+                            <input type="text" name="exporter_address_line1" class="form-input" value="{{ payload.exporter.address_line1 or '' }}">
+                        </div>
+                        <div class="form-group span2">
+                            <label class="form-label">Address Line 2</label>
+                            <input type="text" name="exporter_address_line2" class="form-input" value="{{ payload.exporter.address_line2 or '' }}">
+                        </div>
+                        <div class="form-group span2">
+                            <label class="form-label">Address Line 3</label>
+                            <input type="text" name="exporter_address_line3" class="form-input" value="{{ payload.exporter.address_line3 or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">City</label>
+                            <input type="text" name="exporter_city" class="form-input" value="{{ payload.exporter.city or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">State</label>
+                            <input type="text" name="exporter_state" class="form-input" value="{{ payload.exporter.state or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">PIN / Postal Code</label>
+                            <input type="text" name="exporter_pin_code" class="form-input" value="{{ payload.exporter.pin_code or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Country</label>
+                            <input type="text" name="exporter_country" class="form-input" value="{{ payload.exporter.country or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="exporter_email" class="form-input" value="{{ payload.exporter.email or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">GST Number</label>
+                            <input type="text" name="exporter_gst_number" class="form-input" value="{{ payload.exporter.gst_number or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">IEC Number</label>
+                            <input type="text" name="exporter_iec_number" class="form-input" value="{{ payload.exporter.iec_number or '' }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. CONSIGNEE -->
+            <div class="card" id="card-consignee">
+                <div class="card-header" onclick="toggleCard('card-consignee')">
+                    <h3 class="card-title"><i class="fas fa-truck"></i> 3. Consignee</h3>
+                    <i class="fas fa-chevron-down collapse-icon"></i>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group span2">
+                            <label class="form-label">Consignee Name <span class="req">*</span></label>
+                            <input type="text" name="consignee_consignee_name" class="form-input" value="{{ payload.consignee.consignee_name or '' }}">
+                        </div>
+                        <div class="form-group span2">
+                            <label class="form-label">Company Name</label>
+                            <input type="text" name="consignee_company_name" class="form-input" value="{{ payload.consignee.company_name or '' }}">
+                        </div>
+                        <div class="form-group span2">
+                            <label class="form-label">Address Line 1</label>
+                            <input type="text" name="consignee_address_line1" class="form-input" value="{{ payload.consignee.address_line1 or '' }}">
+                        </div>
+                        <div class="form-group span2">
+                            <label class="form-label">Address Line 2</label>
+                            <input type="text" name="consignee_address_line2" class="form-input" value="{{ payload.consignee.address_line2 or '' }}">
+                        </div>
+                        <div class="form-group span2">
+                            <label class="form-label">Address Line 3</label>
+                            <input type="text" name="consignee_address_line3" class="form-input" value="{{ payload.consignee.address_line3 or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">City</label>
+                            <input type="text" name="consignee_city" class="form-input" value="{{ payload.consignee.city or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">State</label>
+                            <input type="text" name="consignee_state" class="form-input" value="{{ payload.consignee.state or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Postal Code</label>
+                            <input type="text" name="consignee_postal_code" class="form-input" value="{{ payload.consignee.postal_code or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Country</label>
+                            <input type="text" name="consignee_country" class="form-input" value="{{ payload.consignee.country or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone</label>
+                            <input type="text" name="consignee_phone" class="form-input" value="{{ payload.consignee.phone or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="consignee_email" class="form-input" value="{{ payload.consignee.email or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Customer Order No.</label>
+                            <input type="text" name="consignee_customer_order_no" class="form-input" value="{{ payload.consignee.customer_order_no or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Internal Order No.</label>
+                            <input type="text" name="consignee_internal_order_no" class="form-input" value="{{ payload.consignee.internal_order_no or '' }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. SHIPPING -->
+            <div class="card" id="card-shipping">
+                <div class="card-header" onclick="toggleCard('card-shipping')">
+                    <h3 class="card-title"><i class="fas fa-ship"></i> 4. Shipping Information</h3>
+                    <i class="fas fa-chevron-down collapse-icon"></i>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group span2"><label class="form-label">Terms of Delivery</label><input type="text" name="shipping_terms_of_delivery" class="form-input" value="{{ payload.shipping.terms_of_delivery or '' }}"></div>
+                        <div class="form-group span2"><label class="form-label">Payment Terms</label><input type="text" name="shipping_payment_terms" class="form-input" value="{{ payload.shipping.payment_terms or '' }}"></div>
+                        <div class="form-group span2"><label class="form-label">Pre-carriage By</label><input type="text" name="shipping_pre_carriage_by" class="form-input" value="{{ payload.shipping.pre_carriage_by or '' }}"></div>
+                        <div class="form-group span2"><label class="form-label">Place of Receipt</label><input type="text" name="shipping_place_of_receipt" class="form-input" value="{{ payload.shipping.place_of_receipt or '' }}"></div>
+                        <div class="form-group span2"><label class="form-label">By Pre-carrier</label><input type="text" name="shipping_by_pre_carrier" class="form-input" value="{{ payload.shipping.by_pre_carrier or '' }}"></div>
+                        <div class="form-group span2"><label class="form-label">Port of Loading</label><input type="text" name="shipping_port_of_loading" class="form-input" value="{{ payload.shipping.port_of_loading or '' }}"></div>
+                        <div class="form-group span2"><label class="form-label">Port of Discharge</label><input type="text" name="shipping_port_of_discharge" class="form-input" value="{{ payload.shipping.port_of_discharge or '' }}"></div>
+                        <div class="form-group span2"><label class="form-label">Final Destination</label><input type="text" name="shipping_final_destination" class="form-input" value="{{ payload.shipping.final_destination or '' }}"></div>
+                        <div class="form-group span2"><label class="form-label">Vessel / Flight No.</label><input type="text" name="shipping_vessel_flight_no" class="form-input" value="{{ payload.shipping.vessel_flight_no or '' }}"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. ITEMS -->
+            <div class="card" id="card-items">
+                <div class="card-header" onclick="toggleCard('card-items')">
+                    <h3 class="card-title"><i class="fas fa-list"></i> 5. Invoice Items</h3>
+                    <i class="fas fa-chevron-down collapse-icon"></i>
+                </div>
+                <div class="card-body" style="padding-bottom:0">
+                    <div class="section-note">Amount is calculated as Quantity / 100 &times; Rate per 100 Pcs. Enable <strong>Manual Amount Override</strong> on any row to enter the amount directly. Use the drag handle to reorder rows.</div>
+                </div>
+                <div class="items-container">
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th style="width:30px"></th>
+                                <th class="col-num">Item No.</th>
+                                <th class="col-ord">Order No.</th>
+                                <th class="col-pkg">No. of Pkg.</th>
+                                <th class="col-ptype">Package Type</th>
+                                <th>Description of Goods</th>
+                                <th class="col-qty">Qty / Pcs.</th>
+                                <th class="col-rate">Rate / 100 Pcs.</th>
+                                <th class="col-cur">Currency</th>
+                                <th class="col-amt">Amount</th>
+                                <th class="col-hs">HS Code</th>
+                                <th>Duty Drawback</th>
+                                <th style="width:60px">Override</th>
+                                <th style="width:44px"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemsBody"></tbody>
+                    </table>
+                </div>
+                <div style="padding:14px 22px">
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="addItem()"><i class="fas fa-plus"></i> Add Item</button>
+                </div>
+                <div class="totals-bar">
+                    <span class="total-label">Calculated Total:</span>
+                    <span class="total-value" id="calculatedTotal">0.00</span>
+                    <div class="override-box">
+                        <label class="checkbox-row">
+                            <input type="checkbox" name="manual_total_override" id="manual_total_override" {{ 'checked' if payload.manual_total_override }} onchange="onTotalOverrideChange()">
+                            Manual Total Override
+                        </label>
+                        <input type="text" name="manual_total_value" id="manual_total_value" class="form-input" style="width:140px" value="{{ payload.manual_total_value if payload.manual_total_value is not none else '' }}" {{ '' if payload.manual_total_override else 'disabled' }}>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. EXPORT / HS INFORMATION -->
+            <div class="card" id="card-export">
+                <div class="card-header" onclick="toggleCard('card-export')">
+                    <h3 class="card-title"><i class="fas fa-file-shield"></i> 6. Export / HS Information</h3>
+                    <i class="fas fa-chevron-down collapse-icon"></i>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">HS Code (invoice level)</label>
+                            <input type="text" name="hs_code" class="form-input" value="{{ payload.hs_code or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">LUT ARN No.</label>
+                            <input type="text" name="lut_arn_no" class="form-input" value="{{ payload.lut_arn_no or '' }}" placeholder="e.g. AD270326073827N">
+                        </div>
+                        <div class="form-group span2" style="justify-content:flex-end">
+                            <label class="checkbox-row">
+                                <input type="checkbox" name="claim_duty_drawback" {{ 'checked' if payload.claim_duty_drawback }}>
+                                Claim under Duty Drawback
+                            </label>
+                        </div>
+                        <div class="form-group span4">
+                            <label class="form-label">Duty Drawback Statement</label>
+                            <textarea name="duty_drawback_statement" class="form-textarea">{{ payload.duty_drawback_statement or '' }}</textarea>
+                        </div>
+                        <div class="form-group span4">
+                            <label class="form-label">Additional Export Declaration</label>
+                            <textarea name="additional_export_declaration" class="form-textarea">{{ payload.additional_export_declaration or '' }}</textarea>
+                        </div>
+                        <div class="form-group span4">
+                            <label class="form-label">Remarks</label>
+                            <textarea name="remarks" class="form-textarea">{{ payload.remarks or '' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. TOTALS / AMOUNT IN WORDS -->
+            <div class="card" id="card-totals">
+                <div class="card-header" onclick="toggleCard('card-totals')">
+                    <h3 class="card-title"><i class="fas fa-calculator"></i> 7. Totals &amp; Amount in Words</h3>
+                    <i class="fas fa-chevron-down collapse-icon"></i>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group span4">
+                            <label class="form-label">Amount in Words (editable)</label>
+                            <input type="text" name="amount_in_words" id="amount_in_words" class="form-input" value="{{ payload.amount_in_words or '' }}" placeholder="Auto-generated from total and currency">
+                            <span class="form-hint">
+                                <button type="button" class="btn btn-secondary btn-sm" style="margin-top:6px" onclick="regenerateWords(true)"><i class="fas fa-rotate"></i> Regenerate from Total &amp; Currency</button>
+                                <span id="wordsHint" style="margin-left:8px"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. SIGNATURE -->
+            <div class="card" id="card-signature">
+                <div class="card-header" onclick="toggleCard('card-signature')">
+                    <h3 class="card-title"><i class="fas fa-signature"></i> 8. Signature</h3>
+                    <i class="fas fa-chevron-down collapse-icon"></i>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Signature Name</label>
+                            <input type="text" name="signature_name" class="form-input" value="{{ payload.signature_name or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Signature Date</label>
+                            <input type="date" name="signature_date" class="form-input" value="{{ payload.signature_date or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Designation</label>
+                            <input type="text" name="signature_designation" class="form-input" value="{{ payload.signature_designation or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Signature Image (optional)</label>
+                            <input type="file" id="signature_file" accept="image/*" class="form-input" onchange="uploadSignature()">
+                            <div style="margin-top:8px" id="signaturePreviewWrap">
+                                {% if payload.signature_image %}
+                                <img class="signature-preview" src="{{ url_for('static', filename=payload.signature_image) }}">
+                                {% endif %}
+                            </div>
+                            <span class="form-hint" id="sigHint"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. PREVIEW NOTE + ACTIONS -->
+            <div class="card" id="card-preview">
+                <div class="card-header" onclick="toggleCard('card-preview')">
+                    <h3 class="card-title"><i class="fas fa-magnifying-glass-chart"></i> 9. Preview &amp; Generate</h3>
+                    <i class="fas fa-chevron-down collapse-icon"></i>
+                </div>
+                <div class="card-body">
+                    <div class="section-note">
+                        <strong>Save Draft</strong> to keep editing later. <strong>Preview</strong> renders the exact invoice design used for the PDF.
+                        <strong>Generate PDF</strong> validates the invoice, marks it Generated and downloads <code>INVOICE_NUMBER.pdf</code>.
+                        If an already-generated invoice is edited, the original is preserved and your changes are saved as a new revision.
+                    </div>
+                    {% if invoice and invoice.status == 'Generated' %}
+                    <div class="alert alert-warning"><i class="fas fa-triangle-exclamation"></i><span>This invoice has been issued. Saving changes will create a new revision and preserve revision {{ invoice.revision }}.</span></div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="actions-sticky">
+                <button type="submit" name="action" value="save" class="btn btn-secondary"><i class="fas fa-floppy-disk"></i> Save Draft</button>
+                {% if invoice %}
+                <a href="{{ url_for('invoices.invoice_preview', invoice_id=invoice.id) }}" target="_blank" class="btn btn-secondary"><i class="fas fa-magnifying-glass-chart"></i> Preview Invoice</a>
+                <button type="submit" formaction="{{ url_for('invoices.invoice_generate', invoice_id=invoice.id) }}" formmethod="POST" class="btn btn-primary"><i class="fas fa-file-pdf"></i> Generate PDF</button>
+                <a href="{{ url_for('invoices.invoice_pdf', invoice_id=invoice.id) }}" class="btn btn-success"><i class="fas fa-download"></i> Download PDF</a>
+                {% else %}
+                <button type="submit" name="action" value="generate" class="btn btn-primary"><i class="fas fa-file-pdf"></i> Save &amp; Generate PDF</button>
+                {% endif %}
+            </div>
+        </form>
+    </main>
+</div>
+
+<script>
+const CURRENCY_WORDS = {
+    USD: ["Dollar","Dollars","Cent","Cents"],
+    EUR: ["Euro","Euros","Cent","Cents"],
+    GBP: ["Pound","Pounds","Penny","Pence"],
+    INR: ["Rupee","Rupees","Paise","Paise"]
+};
+const EXISTING_ITEMS = {{ payload['items']|tojson }};
+
+function toggleCard(id){
+    document.getElementById(id).classList.toggle('collapsed');
+}
+
+function num(v){
+    if(v === null || v === undefined) return 0;
+    const n = parseFloat(String(v).replace(/,/g,'').trim());
+    return isNaN(n) ? 0 : n;
+}
+
+function fmt(n, dec){
+    dec = dec === undefined ? 2 : dec;
+    return (isFinite(n) ? n : 0).toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+}
+
+function addItem(data){
+    data = data || {};
+    const body = document.getElementById('itemsBody');
+    const row = document.createElement('tr');
+    row.className = 'item-row';
+    row.innerHTML = `
+        <td class="drag-handle" onclick="void 0"><i class="fas fa-grip-vertical"></i></td>
+        <td><input type="text" name="item_item_no[]" value="${esc(data.item_no)}"></td>
+        <td><input type="text" name="item_order_no[]" value="${esc(data.order_no)}"></td>
+        <td><input type="text" name="item_no_of_packages[]" value="${esc(data.no_of_packages)}"></td>
+        <td><input type="text" name="item_package_type[]" value="${esc(data.package_type)}"></td>
+        <td><input type="text" name="item_description[]" value="${esc(data.description)}"></td>
+        <td><input type="text" name="item_quantity[]" value="${esc(data.quantity)}" oninput="recalcRow(this)"></td>
+        <td><input type="text" name="item_rate_per_100[]" value="${esc(data.rate_per_100)}" oninput="recalcRow(this)"></td>
+        <td>
+            <select name="item_currency[]" class="cur-select">
+                ${['','USD','EUR','GBP','INR'].map(c=>`<option value="${c}" ${data.currency===c?'selected':''}>${c||'-'}</option>`).join('')}
+            </select>
+        </td>
+        <td><input type="text" name="item_amount[]" value="${data.amount!==undefined&&data.amount!==null?Number(data.amount).toFixed(2):''}" class="amount-input" ${data.manual_amount_override?'':'readonly'}></td>
+        <td><input type="text" name="item_hs_code[]" value="${esc(data.hs_code)}"></td>
+        <td><input type="text" name="item_duty_drawback_info[]" value="${esc(data.duty_drawback_info)}"></td>
+        <td style="text-align:center"><input type="checkbox" name="item_manual_amount_override[]" ${data.manual_amount_override?'checked':''} onchange="toggleRowOverride(this)"></td>
+        <td style="text-align:center"><button type="button" class="action-btn del" onclick="removeItem(this)" title="Remove"><i class="fas fa-trash"></i></button></td>
+    `;
+    body.appendChild(row);
+    recalcAll();
+}
+
+function esc(v){
+    if(v === null || v === undefined) return '';
+    return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function removeItem(btn){
+    btn.closest('tr').remove();
+    recalcAll();
+}
+
+function toggleRowOverride(cb){
+    const row = cb.closest('tr');
+    const amountInput = row.querySelector('.amount-input');
+    if(cb.checked){
+        amountInput.removeAttribute('readonly');
+        amountInput.focus();
+    } else {
+        amountInput.setAttribute('readonly','readonly');
+        recalcRow(amountInput);
+    }
+    recalcAll();
+}
+
+function recalcRow(el){
+    const row = el.closest('tr');
+    const override = row.querySelector('input[name="item_manual_amount_override[]"]').checked;
+    if(override) return;
+    const qty = num(row.querySelector('input[name="item_quantity[]"]').value);
+    const rate = num(row.querySelector('input[name="item_rate_per_100[]"]').value);
+    row.querySelector('.amount-input').value = (qty/100*rate).toFixed(2);
+    recalcAll();
+}
+
+function recalcAll(){
+    let total = 0;
+    document.querySelectorAll('.item-row').forEach(row => {
+        total += num(row.querySelector('.amount-input').value);
+    });
+    document.getElementById('calculatedTotal').textContent = fmt(total);
+    updateFinalTotal();
+}
+
+function onTotalOverrideChange(){
+    const cb = document.getElementById('manual_total_override');
+    const input = document.getElementById('manual_total_value');
+    if(cb.checked){
+        const msg = 'Manual Total Override is enabled. The calculated total from all items will be ignored and the PDF will show your manually entered total. Continue?';
+        if(!confirm(msg)){
+            cb.checked = false;
+            return;
+        }
+        input.removeAttribute('disabled');
+        input.focus();
+    } else {
+        input.setAttribute('disabled','disabled');
+        regenerateWords(false);
+    }
+    updateFinalTotal();
+}
+
+function updateFinalTotal(){
+    const cb = document.getElementById('manual_total_override');
+    if(cb && cb.checked){
+        const v = document.getElementById('manual_total_value').value;
+        document.getElementById('calculatedTotal').textContent = fmt(num(v)) + ' (manual)';
+    }
+    regenerateWords(false);
+}
+
+/* ---- Amount in words (mirrors server-side logic) ---- */
+const UNITS=["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
+const TENS=["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
+function two(n){ if(n<20) return UNITS[n]; return (TENS[Math.floor(n/10)] + (n%10? " "+UNITS[n%10]:"")).trim(); }
+function three(n){ if(n<100) return two(n); let t=UNITS[Math.floor(n/100)]+" Hundred"; if(n%100) t+=" "+two(n%100); return t; }
+function intWords(num){
+    num = Math.floor(num);
+    if(num===0) return "Zero";
+    let parts=[];
+    [[10000000,"Crore"],[100000,"Lakh"],[1000,"Thousand"]].forEach(([d,label])=>{
+        if(num>=d){ let c=Math.floor(num/d); num%=d; parts.push(intWords(c)+" "+label); }
+    });
+    if(num>=100){ parts.push(three(num)); num=0; }
+    else if(num>0){ parts.push(two(num)); }
+    return parts.filter(Boolean).join(" ").trim();
+}
+function amountInWords(amount, currency){
+    currency = (currency||'').toUpperCase();
+    const w = CURRENCY_WORDS[currency] || [currency||'Units', currency||'Units','Cent','Cents'];
+    let value = Math.round(num(amount)*100)/100;
+    let whole = Math.floor(value);
+    let frac = Math.round((value-whole)*100);
+    if(frac===100){ whole+=1; frac=0; }
+    const major = whole===1? w[0]: w[1];
+    const minor = frac===1? w[2]: w[3];
+    let out = intWords(whole)+" "+major;
+    if(frac) out += " and "+intWords(frac)+" "+minor;
+    else out += (currency==='INR' ? " and No Paise" : " and No Cents");
+    return out+" Only";
+}
+
+let wordsManual = false;
+document.addEventListener('input', function(e){
+    if(e.target && e.target.id === 'amount_in_words'){ wordsManual = true; }
+});
+function regenerateWords(force){
+    const field = document.getElementById('amount_in_words');
+    if(!field) return;
+    if(wordsManual && !force) return;
+    if(force) wordsManual = false;
+    const currency = document.getElementById('currency').value;
+    const cb = document.getElementById('manual_total_override');
+    let total;
+    if(cb && cb.checked){ total = num(document.getElementById('manual_total_value').value); }
+    else {
+        total = 0;
+        document.querySelectorAll('.item-row').forEach(row => { total += num(row.querySelector('.amount-input').value); });
+    }
+    field.value = amountInWords(total, currency);
+}
+
+/* ---- Signature upload ---- */
+function uploadSignature(){
+    const fileInput = document.getElementById('signature_file');
+    if(!fileInput.files.length) return;
+    const fd = new FormData();
+    fd.append('signature_file', fileInput.files[0]);
+    fetch('{{ url_for("invoices.upload_signature") }}', {method:'POST', body:fd})
+        .then(r=>r.json())
+        .then(data=>{
+            if(data.ok){
+                document.getElementById('signature_image').value = data.path;
+                document.getElementById('signaturePreviewWrap').innerHTML =
+                    '<img class="signature-preview" src="/static/'+data.path+'">';
+                document.getElementById('sigHint').textContent = 'Signature uploaded.';
+            } else {
+                document.getElementById('sigHint').textContent = data.error || 'Upload failed.';
+            }
+        })
+        .catch(()=>{ document.getElementById('sigHint').textContent = 'Upload failed.'; });
+}
+
+/* ---- CRM import ---- */
+const CRM_API = {
+    customers: '{{ url_for("invoices.crm_customers") }}',
+    orders: '{{ url_for("invoices.crm_orders") }}',
+    products: '{{ url_for("invoices.crm_products") }}'
+};
+function searchCrm(kind){
+    const map = {customers:'crmCustomer', orders:'crmOrder', products:'crmProduct'};
+    const q = document.getElementById(map[kind]+'Q').value;
+    const box = document.getElementById(map[kind]+'Results');
+    fetch(CRM_API[kind] + '?q=' + encodeURIComponent(q))
+        .then(r=>r.json())
+        .then(items=>{
+            box.innerHTML = items.length ? items.map(it=>{
+                const label = it.company || it.name || it.customer || ('#'+it.id);
+                const sub = [it.name, it.email, it.country].filter(Boolean).join(' · ');
+                return '<div class="crm-item" onclick=\'importCrm("'+kind+'", '+JSON.stringify(it).replace(/'/g,"&#39;")+')\'><strong>'+label+'</strong><span>'+sub+'</span></div>';
+            }).join('') : '<div class="crm-item">No results</div>';
+            box.classList.add('show');
+        });
+}
+
+function setField(name, value){
+    const el = document.querySelector('[name="'+name+'"]');
+    if(el && value !== null && value !== undefined && value !== '') el.value = value;
+}
+
+function importCrm(kind, item){
+    if(kind === 'customers'){
+        setField('consignee_company_name', item.company);
+        setField('consignee_consignee_name', item.name || item.company);
+        setField('consignee_email', item.email);
+        setField('consignee_phone', item.phone);
+        setField('consignee_country', item.country);
+        document.querySelectorAll('.crm-results').forEach(b=>b.classList.remove('show'));
+    } else if(kind === 'orders'){
+        setField('customer_order_no', item.order_no);
+        setField('consignee_company_name', item.company);
+        setField('consignee_customer_order_no', item.order_no);
+        document.querySelectorAll('.crm-results').forEach(b=>b.classList.remove('show'));
+    } else if(kind === 'products'){
+        const desc = [item.name, item.standard, item.material].filter(Boolean).join(', ');
+        const currencies = document.querySelectorAll('select[name="item_currency[]"]');
+        const cur = currencies.length ? currencies[currencies.length-1].value : '';
+        addItem({description: desc, currency: cur || document.getElementById('currency').value});
+        document.querySelectorAll('.crm-results').forEach(b=>b.classList.remove('show'));
+    }
+}
+
+/* ---- Init ---- */
+document.addEventListener('DOMContentLoaded', function(){
+    EXISTING_ITEMS.forEach(it => addItem(it));
+    if(!EXISTING_ITEMS.length) addItem({item_no:'1', currency: document.getElementById('currency').value});
+    document.getElementById('currency').addEventListener('change', ()=>regenerateWords(true));
+    document.getElementById('manual_total_value').addEventListener('input', updateFinalTotal);
+    recalcAll();
+    if(!document.getElementById('amount_in_words').value) regenerateWords(true);
+});
+</script>
+</body>
+</html>

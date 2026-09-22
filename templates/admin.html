@@ -117,6 +117,11 @@ body{font-family:Inter,sans-serif;background:var(--gray-100);color:var(--gray-90
 <a href="#products" class="nav-item" data-tab="products"><i class="fas fa-box"></i><span>Products</span><span class="badge">{{ products|length }}</span></a>
 <a href="#categories" class="nav-item" data-tab="categories"><i class="fas fa-tags"></i><span>Categories</span><span class="badge">{{ categories|length }}</span></a>
 <a href="#countries" class="nav-item" data-tab="countries"><i class="fas fa-globe"></i><span>Countries</span><span class="badge">{{ countries|length }}</span></a>
+            <a href="{{ url_for('invoices.invoice_list') }}" class="nav-item">
+                <i class="fas fa-file-invoice"></i>
+                <span>Invoices</span>
+            </a>
+
 </nav>
 <div class="sidebar-footer">
 <a href="/admin/logout" class="logout-btn"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
