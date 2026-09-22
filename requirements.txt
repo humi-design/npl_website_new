@@ -1,0 +1,7 @@
+# Runtime dependencies for the Nirmal Precision site + Invoice Generator.
+# The invoice PDF is rendered from the shared invoice_pdf.html template using
+# xhtml2pdf, so that dependency is required for Generate / Download PDF.
+Flask
+Flask-SQLAlchemy
+PyMySQL
+xhtml2pdf

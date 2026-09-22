@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview {{ invoice.invoice_number }} | Admin | Nirmal Precision</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--primary:#0A4D9C;--primary-light:#1E88E5;--gray-900:#111827;--gray-700:#374151;--gray-600:#4B5563;--gray-500:#6B7280;--gray-400:#9CA3AF;--gray-200:#E5E7EB;--gray-100:#F3F4F6;--white:#FFFFFF;--dark:#0F172A;--radius:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,sans-serif;background:var(--gray-100);color:var(--gray-900)}
+.topbar{background:var(--dark);color:var(--white);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.topbar h1{font-size:16px;font-weight:600}
+.topbar .meta{font-size:12px;color:var(--gray-400)}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:10px;font-size:13px;font-weight:600;text-decoration:none;border:none;cursor:pointer}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff}
+.btn-secondary{background:rgba(255,255,255,0.12);color:#fff}
+.btn-success{background:#10B981;color:#fff}
+.stage{display:flex;justify-content:center;padding:28px 16px 60px}
+.paper{width:210mm;min-height:297mm;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,0.18)}
+.paper iframe{width:210mm;height:297mm;border:0;display:block}
+@media (max-width:900px){.paper,.paper iframe{width:100%;height:80vh}}
+</style>
+</head>
+<body>
+<div class="topbar">
+    <div>
+        <h1>Invoice Preview — {{ invoice.invoice_number }}{% if invoice.revision and invoice.revision > 1 %} (Rev {{ invoice.revision }}){% endif %}</h1>
+        <div class="meta">Status: {{ invoice.status }} · This is the exact rendering used for the PDF.</div>
+    </div>
+    <div class="actions">
+        <a href="{{ url_for('invoices.invoice_edit', invoice_id=invoice.id) }}" class="btn btn-secondary"><i class="fas fa-pen"></i> Edit</a>
+        <a href="{{ url_for('invoices.invoice_view', invoice_id=invoice.id) }}" class="btn btn-secondary"><i class="fas fa-eye"></i> View</a>
+        <a href="{{ url_for('invoices.invoice_pdf', invoice_id=invoice.id) }}" class="btn btn-primary"><i class="fas fa-file-pdf"></i> Download PDF</a>
+        <a href="{{ url_for('invoices.invoice_list') }}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> List</a>
+    </div>
+</div>
+<div class="stage">
+    <div class="paper">
+        <iframe src="{{ url_for('invoices.invoice_preview_frame', invoice_id=invoice.id) }}" title="Invoice preview"></iframe>
+    </div>
+</div>
+</body>
+</html>

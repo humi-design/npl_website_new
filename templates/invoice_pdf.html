@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+{#--------------------------------------------------------------------------
+  Nirmal Precision export invoice.
+
+  This template is the single source of truth for the invoice DESIGN. It is
+  rendered both for the on-screen Preview and for the downloaded PDF so the two
+  are always identical.
+
+  All content comes from invoice data (invoice.exporter / consignee / shipping
+  / items and the invoice header fields). Nothing about the company is
+  hard-coded here, so this template can be reused for other company details.
+
+  Layout notes: kept deliberately traditional (bordered tables, plain rules)
+  and limited to CSS that xhtml2pdf supports.
+---------------------------------------------------------------------------#}
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    @page {
+        size: A4;
+        margin: 12mm 12mm 12mm 12mm;
+    }
+    body {
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 8.5pt;
+        color: #000000;
+        line-height: 1.25;
+    }
+    .title {
+        text-align: center;
+        font-size: 13pt;
+        font-weight: bold;
+        letter-spacing: 1px;
+        margin: 0 0 2pt 0;
+    }
+    .subtitle {
+        text-align: center;
+        font-size: 8pt;
+        margin: 0 0 6pt 0;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    td, th {
+        vertical-align: top;
+        padding: 3pt 4pt;
+    }
+    .box {
+        border: 1px solid #000000;
+    }
+    .box td, .box th {
+        border: 1px solid #000000;
+    }
+    .label {
+        font-weight: bold;
+    }
+    .section-head {
+        background-color: #E8E8E8;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 8pt;
+        letter-spacing: 0.5px;
+    }
+    .company-name {
+        font-size: 11pt;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    .muted {
+        font-size: 7.5pt;
+    }
+    .items-table th {
+        border: 1px solid #000000;
+        background-color: #E8E8E8;
+        font-size: 7.5pt;
+        text-align: center;
+    }
+    .items-table td {
+        border: 1px solid #000000;
+        font-size: 7.5pt;
+    }
+    .right { text-align: right; }
+    .center { text-align: center; }
+    .words {
+        border: 1px solid #000000;
+        padding: 4pt;
+    }
+    .declaration {
+        font-size: 7pt;
+        text-align: justify;
+    }
+    .signature-block {
+        text-align: right;
+        font-size: 8pt;
+    }
+    .signature-image {
+        height: 45pt;
+    }
+    .footer-note {
+        font-size: 6.5pt;
+        text-align: center;
+        margin-top: 4pt;
+    }
+</style>
+</head>
+<body>
+
+<div class="title">INVOICE</div>
+{% if invoice.revision and invoice.revision > 1 %}
+<div class="subtitle">Revision {{ invoice.revision }} (original {{ invoice.revision_of }})</div>
+{% endif %}
+
+<!-- ===================== HEADER : EXPORTER + INVOICE INFO ===================== -->
+<table class="box">
+    <tr>
+        <td style="width:55%">
+            <div class="company-name">{{ exporter.exporter_name or '' }}</div>
+            {% for line in exporter_lines %}
+            <div>{{ line }}</div>
+            {% endfor %}
+            {% if exporter and exporter.country %}<div>{{ exporter.country }}</div>{% endif %}
+            {% if exporter and exporter.telephone %}<div>TEL: {{ exporter.telephone }}</div>{% endif %}
+            {% if exporter and exporter.email %}<div>Email: {{ exporter.email }}</div>{% endif %}
+            {% if exporter and exporter.gst_number %}<div>GST: {{ exporter.gst_number }}</div>{% endif %}
+            {% if exporter and exporter.iec_number %}<div>IEC No.: {{ exporter.iec_number }}</div>{% endif %}
+        </td>
+        <td style="width:45%">
+            <table>
+                <tr>
+                    <td class="label" style="width:48%">Invoice No.</td>
+                    <td>{{ invoice.invoice_number or '' }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Invoice Date</td>
+                    <td>{{ invoice_date_str }}</td>
+                </tr>
+                {% if invoice.supplier_ac_no %}
+                <tr>
+                    <td class="label">Supplier A/C No.</td>
+                    <td>{{ invoice.supplier_ac_no }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td class="label">Currency</td>
+                    <td>{{ invoice.currency or '' }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Country of Origin</td>
+                    <td>{{ invoice.country_of_origin or '' }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Country of Final Destination</td>
+                    <td>{{ invoice.country_of_final_destination or '' }}</td>
+                </tr>
+                {% if invoice.customer_order_no %}
+                <tr>
+                    <td class="label">Customer Order No.</td>
+                    <td>{{ invoice.customer_order_no }}</td>
+                </tr>
+                {% endif %}
+                {% if invoice.internal_order_no %}
+                <tr>
+                    <td class="label">Internal Order No.</td>
+                    <td>{{ invoice.internal_order_no }}</td>
+                </tr>
+                {% endif %}
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- ===================== CONSIGNEE + SHIPPING ===================== -->
+<table class="box" style="margin-top:-1px">
+    <tr>
+        <td style="width:55%">
+            <div class="label">CONSIGNEE</div>
+            {% if consignee %}
+                {% if consignee.consignee_name %}<div class="label">{{ consignee.consignee_name }}</div>{% endif %}
+                {% if consignee.company_name %}<div>{{ consignee.company_name }}</div>{% endif %}
+                {% for line in consignee_lines %}
+                <div>{{ line }}</div>
+                {% endfor %}
+                {% if consignee.country %}<div>{{ consignee.country }}</div>{% endif %}
+                {% if consignee.phone %}<div>Phone: {{ consignee.phone }}</div>{% endif %}
+                {% if consignee.email %}<div>Email: {{ consignee.email }}</div>{% endif %}
+            {% endif %}
+        </td>
+        <td style="width:45%">
+            <table>
+                {% if shipping and shipping.terms_of_delivery %}
+                <tr><td class="label" style="width:48%">Terms of Delivery</td><td>{{ shipping.terms_of_delivery }}</td></tr>
+                {% endif %}
+                {% if shipping and shipping.payment_terms %}
+                <tr><td class="label">Payment Terms</td><td>{{ shipping.payment_terms }}</td></tr>
+                {% endif %}
+                {% if shipping and shipping.pre_carriage_by %}
+                <tr><td class="label">Pre-carriage By</td><td>{{ shipping.pre_carriage_by }}</td></tr>
+                {% endif %}
+                {% if shipping and shipping.place_of_receipt %}
+                <tr><td class="label">Place of Receipt</td><td>{{ shipping.place_of_receipt }}</td></tr>
+                {% endif %}
+                {% if shipping and shipping.by_pre_carrier %}
+                <tr><td class="label">By Pre-carrier</td><td>{{ shipping.by_pre_carrier }}</td></tr>
+                {% endif %}
+                {% if shipping and shipping.port_of_loading %}
+                <tr><td class="label">Port of Loading</td><td>{{ shipping.port_of_loading }}</td></tr>
+                {% endif %}
+                {% if shipping and shipping.port_of_discharge %}
+                <tr><td class="label">Port of Discharge</td><td>{{ shipping.port_of_discharge }}</td></tr>
+                {% endif %}
+                {% if shipping and shipping.final_destination %}
+                <tr><td class="label">Final Destination</td><td>{{ shipping.final_destination }}</td></tr>
+                {% endif %}
+                {% if shipping and shipping.vessel_flight_no %}
+                <tr><td class="label">Vessel / Flight No.</td><td>{{ shipping.vessel_flight_no }}</td></tr>
+                {% endif %}
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- ===================== ITEMS ===================== -->
+<table class="items-table" style="margin-top:-1px">
+    <thead>
+        <tr>
+            <th style="width:5%">Item<br>No.</th>
+            <th style="width:9%">Order No.</th>
+            <th style="width:6%">No. of<br>Packages</th>
+            <th style="width:8%">Package<br>Type</th>
+            <th style="width:31%">Description of Goods</th>
+            <th style="width:9%">Quantity<br>(Pcs.)</th>
+            <th style="width:11%">Rate /<br>100 Pcs.</th>
+            <th style="width:7%">Curr.</th>
+            <th style="width:14%">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td class="center">{{ item.item_no or '' }}</td>
+            <td class="center">{{ item.order_no or '' }}</td>
+            <td class="center">{{ item.no_of_packages or '' }}</td>
+            <td class="center">{{ item.package_type or '' }}</td>
+            <td>
+                {{ item.description or '' }}
+                {% if item.hs_code %}<div class="muted">HS Code: {{ item.hs_code }}</div>{% endif %}
+                {% if item.duty_drawback_info %}<div class="muted">{{ item.duty_drawback_info }}</div>{% endif %}
+            </td>
+            <td class="right">{{ item.quantity|amt(0) }}</td>
+            <td class="right">{{ item.rate_per_100|amt(3) }}</td>
+            <td class="center">{{ item.currency or invoice.currency or '' }}</td>
+            <td class="right">{{ item.amount|amt(2) }}</td>
+        </tr>
+        {% endfor %}
+        {% if not items %}
+        <tr>
+            <td colspan="9" class="center">No items</td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td colspan="8" class="right label">TOTAL</td>
+            <td class="right label">{{ invoice.currency or '' }} {{ total_display }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- ===================== AMOUNT IN WORDS ===================== -->
+<table style="margin-top:-1px">
+    <tr>
+        <td class="words">
+            <span class="label">Amount in Words:</span> {{ amount_words }}
+        </td>
+    </tr>
+</table>
+
+<!-- ===================== EXPORT / HS DECLARATIONS ===================== -->
+{% if invoice.hs_code or invoice.claim_duty_drawback or invoice.duty_drawback_statement or invoice.additional_export_declaration or invoice.lut_arn_no or invoice.remarks %}
+<table class="box" style="margin-top:-1px">
+    <tr><td>
+        {% if invoice.hs_code %}<div><span class="label">HS Code:</span> {{ invoice.hs_code }}</div>{% endif %}
+        {% if invoice.claim_duty_drawback %}<div><span class="label">Claim under Duty Drawback:</span> Yes</div>{% endif %}
+        {% if invoice.duty_drawback_statement %}<div class="declaration"><span class="label">Duty Drawback Statement:</span> {{ invoice.duty_drawback_statement }}</div>{% endif %}
+        {% if invoice.lut_arn_no %}<div><span class="label">LUT ARN No.:</span> {{ invoice.lut_arn_no }}</div>{% endif %}
+        {% if invoice.additional_export_declaration %}<div class="declaration"><span class="label">Declaration:</span> {{ invoice.additional_export_declaration }}</div>{% endif %}
+        {% if invoice.remarks %}<div class="declaration"><span class="label">Remarks:</span> {{ invoice.remarks }}</div>{% endif %}
+    </td></tr>
+</table>
+{% endif %}
+
+<!-- ===================== SIGNATURE ===================== -->
+<table style="margin-top:14pt">
+    <tr>
+        <td style="width:55%">
+            <div class="footer-note" style="text-align:left">
+                This is a computer generated invoice.
+            </div>
+        </td>
+        <td style="width:45%" class="signature-block">
+            <div><span class="label">For {{ exporter.exporter_name or '' }}</span></div>
+            {% if signature_image_url %}
+            <div><img class="signature-image" src="{{ signature_image_url }}" alt=""></div>
+            {% else %}
+            <div style="height:45pt"></div>
+            {% endif %}
+            {% if invoice.signature_name %}<div class="label">{{ invoice.signature_name }}</div>{% endif %}
+            {% if invoice.signature_designation %}<div>{{ invoice.signature_designation }}</div>{% endif %}
+            {% if signature_date_str %}<div>Date: {{ signature_date_str }}</div>{% endif %}
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
